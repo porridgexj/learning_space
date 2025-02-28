@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from .import api_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
-    path('api/register', views.register, name='register')
 ]
+
+urlpatterns.extend(api_urls.urlpatterns)
