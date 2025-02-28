@@ -1,3 +1,22 @@
 body {
     margin: 0;
 }
+
+.page-content::-webkit-scrollbar {
+    display: none;
+}
+
+.learning-space {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-content {
+    width: 100%;
+    height: calc(100% - var(--header-height));
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+}

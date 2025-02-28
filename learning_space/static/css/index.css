@@ -1,8 +1,40 @@
+:root {
+    --space-list-width: 400px;
+}
+
 .index-page {
     width: 100%;
-    height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 120px 40px;
+}
+
+.slogan {
+    width: 100%;
+    height: 140px;
+    font-size: 60px;
+    line-height: 60px;
+    font-weight: bold;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 40px;
+    padding-left: 20px;
+}
+
+.choose-space {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.space-list {
+    width: var(--space-list-width);
+    height: 100%;
+    background-color: #0a3622;
+}
+
+.map-area {
+    width: calc(100% - var(--space-list-width));
+    height: 100%;
+    background-color: #0dcaf0;
 }

@@ -1,9 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Learning space{% endblock %}
 {% load static %}
-{% block content %}
+{% block css %}
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/utils/leaflet/leaflet.css' %}">
+{% endblock %}
+{% block content %}
     <div class="index-page">
-        Learning space index
+        <div class="slogan">Find a learning space</div>
+        <div class="choose-space">
+            <div id="map-container" class="map-area"></div>
+            <div class="space-list"></div>
+        </div>
     </div>
+{% endblock %}
+{% block js %}
+    <script src="{% static 'js/utils/leaflet.js' %}"></script>
+    <script src="{% static 'js/index.js' %}"></script>
 {% endblock %}
