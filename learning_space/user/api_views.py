@@ -1,7 +1,12 @@
+# 1登陆
+# 2注册
+# 3评论接口（前端给邮箱和教室id）
+# 4根据邮箱查询收藏列表
+# 5根据邮箱查询预订历史
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-from .models import User
+from ..models import User
 import json
 import hashlib
 import re

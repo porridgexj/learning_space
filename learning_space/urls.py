@@ -17,11 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
-from .import api_urls
+from .user.api_urls import user_urls
+from .space.api_urls import space_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
 ]
 
-urlpatterns.extend(api_urls.urlpatterns)
+urlpatterns.extend(user_urls)
+urlpatterns.extend(space_urls)
