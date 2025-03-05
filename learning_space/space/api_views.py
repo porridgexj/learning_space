@@ -159,7 +159,7 @@ def classroom_review_list(request, classroom_id):
     email = request.GET.get('email', '')
     reviews = Comment.objects.filter(space_id=classroom_id)
     if email:
-        reviews = reviews.filter(user__email=email)
+        reviews = reviews.filter(user__email=email).order_by('-create_time').desc()
     review_data = []
     for r in reviews:
         review_data.append({
@@ -178,11 +178,6 @@ def classroom_review_list(request, classroom_id):
     return JsonResponse(data)
 
 
-# -------------------------------
-# 预定座位接口
-# URL: POST /api/v1/bookings
-# 请求参数（JSON）： user_email, classroom_id, seat_no, start_time, end_time
-# -------------------------------
 @csrf_exempt
 def book_seat(request):
     if request.method != 'POST':
@@ -213,7 +208,7 @@ def book_seat(request):
     active_existing = Booking.objects.filter(
         space_id=data['classroom_id'],
         seat_no=data['seat_no'],
-        start_time__lt=now + timedelta(hours=2),
+        start_time__lt=now + timedelta(hours=6),
         end_time__gt=now
     )
     if active_existing.exists():
