@@ -23,10 +23,12 @@ class LearningSpace(models.Model):
     description = models.TextField(null=True, blank=True, help_text='Description')
     seat_num = models.IntegerField(help_text='Total number of seats')
     left_seat_num = models.IntegerField(help_text='Available seats count')
-    left_seat_no_list = models.CharField(max_length=255, null=True, blank=True, help_text='Available seat list, e.g., [1,2,3]')
     score = models.DecimalField(max_digits=3, decimal_places=2, default=0.00, help_text='Average score')
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text='Longitude')
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text='Latitude')
     create_time = models.DateTimeField(auto_now_add=True, help_text='Creation time')
     status = models.IntegerField(choices=STATUS_CHOICES, default=0, help_text='Status: 0 - Open, 1 - Closed')
+    img_cover = models.CharField(max_length=255, null=True, blank=True, help_text='space cover')
 
     class Meta:
         db_table = 'learning_space'
@@ -81,6 +83,7 @@ class Booking(models.Model):
     start_time = models.DateTimeField(help_text='Start time')
     end_time = models.DateTimeField(help_text='End time')
     seat_no = models.IntegerField(help_text='Seat number')
+    create_time = models.DateTimeField(auto_now_add=True, help_text='Creation time')
 
     class Meta:
         db_table = 'booking'
