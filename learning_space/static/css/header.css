@@ -1,16 +1,20 @@
 :root {
-    --header-height: 60px;
+  --header-height: 60px;
 }
 
 .header {
-    width: 100%;
-    min-height: var(--header-height);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    border-bottom: 1px solid #c8c8c8;
+  width: 100%;
+  min-height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-bottom: 1px solid #c8c8c8;
+}
+
+.header div {
+  margin-right: 20px;
 }
 
 .header-button {
-    margin-right: 20px;
+  margin-right: 20px;
 }

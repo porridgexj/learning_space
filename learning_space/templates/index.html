@@ -2,41 +2,35 @@
 {% block title %}Learning space{% endblock %}
 {% load static %}
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <link rel="stylesheet" href="{% static 'css/utils/leaflet/leaflet.css' %}">
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" href="{% static 'css/utils/leaflet/leaflet.css' %}">
 {% endblock %}
 {% block content %}
-    <div class="index-page">
-        <div class="slogan">Find a learning space</div>
-        <div class="choose-space">
-            <div class="map-area">
-                <div id="map-container" ></div>
-            </div>
-            <div class="space-list">
-                <div class="space-filter">sort by</div>
-                <div class="space-container">
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                    <div class="space"></div>
-                </div>
-            </div>
-        </div>
+<div class="index-page">
+  <div class="slogan">Find a learning space...</div>
+  <div class="choose-space">
+    <div class="map-area">
+      <div id="map-container"></div>
     </div>
+    <div class="space-list">
+      <div class="space-filter">
+        <span class="sort-by">Sort by</span>
+        <select>
+          <option value="distance">Distance</option>
+          <option value="rating">Rating</option>
+        </select>
+      </div>
+      <div id="space-item-template" class="space" style="display: none;">
+        <div class="space-name"></div>
+        <div class="space-rating"></div>
+      </div>
+      <div id="space-container" class="space-container">
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block js %}
-    <script src="{% static 'js/utils/leaflet.js' %}"></script>
-    <script src="{% static 'js/index.js' %}"></script>
+<script src="{% static 'js/utils/leaflet.js' %}"></script>
+<script src="{% static 'js/index.js' %}"></script>
 {% endblock %}

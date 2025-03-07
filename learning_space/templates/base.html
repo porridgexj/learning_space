@@ -1,30 +1,33 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Learning space{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/header.css' %}">
-    <link rel="stylesheet" href="{% static 'css/utils/bootstrap.min.css' %}">
-    {% block css %}
-        <!-- page css -->
-    {% endblock %}
+  <meta charset="UTF-8">
+  <title>{% block title %}Learning space{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/header.css' %}">
+  <link rel="stylesheet" href="{% static 'css/utils/bootstrap.min.css' %}">
+  {% block css %}
+  <!-- page css -->
+  {% endblock %}
 </head>
+
 <body>
-<div class="learning-space">
+  <div class="learning-space">
     <div class="page-content">
-        {% include "components/header.html" %}
-        {% block content %}
-            <!-- page content -->
-        {% endblock %}
+      {% include "components/header.html" %}
+      {% block content %}
+      <!-- page content -->
+      {% endblock %}
     </div>
 
-</div>
-
-<script src="{% static 'js/utils/bootstrap.bundle.min.js' %}"></script>
-{% block js %}
-    <!-- page js -->
-{% endblock %}
+  </div>
+  <script src="{% static 'js/utils/jquery-3.7.1.min.js' %}"></script>
+  <script src="{% static 'js/utils/bootstrap.bundle.min.js' %}"></script>
+  {% block js %}
+  <!-- page js -->
+  {% endblock %}
 </body>
+
 </html>
