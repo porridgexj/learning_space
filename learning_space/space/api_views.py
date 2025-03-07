@@ -159,7 +159,7 @@ def classroom_review_list(request, classroom_id):
     email = request.GET.get('email', '')
     reviews = Comment.objects.filter(space_id=classroom_id)
     if email:
-        reviews = reviews.filter(user__email=email).order_by('-create_time').desc()
+        reviews = reviews.filter(user__email=email).order_by('-create_time')
     review_data = []
     for r in reviews:
         review_data.append({
