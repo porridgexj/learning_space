@@ -1,14 +1,14 @@
 :root {
-    --header-height: 80px;
+    --header-height: 60px;
 }
 
 .header {
     width: 100%;
-    height: var(--header-height);
-    background-color: #aaaaaa;
+    min-height: var(--header-height);
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    border-bottom: 1px solid #c8c8c8;
 }
 
 .header-button {
