@@ -15,14 +15,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from . import views
-from .user.api_urls import user_urls
-from .space.api_urls import space_urls
+from learning_space.user import api_views
+from learning_space.user.api_urls import urlpatterns as user_urls  
+from learning_space.space.api_urls import urlpatterns as space_urls
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
+    path('api/user', include('learning_space.user.api_urls')),
+    path('api/space', include('learning_space.space.api_urls')),
+    path('api/', include(user_urls)),
+    path('api/', include(space_urls)),
+    path('api/register/', api_views.register, name='register'), 
+    path('api/login/', api_views.login, name='login'),
+    path('api/', include('learning_space.user.api_urls')),
 ]
 
 urlpatterns.extend(user_urls)
