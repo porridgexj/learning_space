@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+{% block content %}
+<div class="login-page">
+  <div class="middle-content">
+    <div class="left">
+      <div class="it-form-title">Log in</div>
+      <form onsubmit="return false" id="login-form" class="it-form">
+        <div class="it-form-label">Username</div>
+        <input class="it-form-input it-input" placeholder="Username" required>
+        <div class="it-form-label">Password</div>
+        <input class="it-form-input it-input" type="password" placeholder="Password" required>
+        <div class="it-btn" type="submit">Log in</div>
+      </form>
+    </div>
+    <div class="right">
+      <div class="no-account-slogan">Don't have an account yet?</div>
+      <div class="it-form-title">Sign up</div>
+      <form onsubmit="return false" id="register-form" class="it-form">
+        <div class="it-form-label">Username</div>
+        <input class="it-form-input it-input" placeholder="Username">
+        <div class="it-form-label">Password</div>
+        <input class="it-form-input it-input" type="password" placeholder="Password">
+        <div class="it-form-label">Confirm Password</div>
+        <input class="it-form-input it-input" type="password" placeholder="Confirm Password">
+        <div class="it-btn" type="submit">Sign up</div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

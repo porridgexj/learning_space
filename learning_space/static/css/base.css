@@ -12,6 +12,11 @@
   font-family: 'SF Pro Text', sans-serif;
 }
 
+a {
+  text-decoration: none !important;
+}
+
+
 body {
   margin: 0;
 }
@@ -44,6 +49,7 @@ body {
   align-items: center;
   justify-content: center;
   color: var(--theme-color-2);
+  user-select: none;
 }
 
 .it-btn:hover {
@@ -61,4 +67,11 @@ select {
 
 .display-none {
   display: none;
+}
+
+.it-input {
+  border-radius: 8px;
+  border: 1px solid var(--theme-color-1);
+  padding: 0 6px;
+  background-color: #f8f4ed;
 }

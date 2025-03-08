@@ -23,6 +23,7 @@ from .space.api_urls import space_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
+    path('login', views.login),
 ]
 
 urlpatterns.extend(user_urls)
