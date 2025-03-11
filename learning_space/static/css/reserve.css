@@ -1,0 +1,41 @@
+:root {
+    --space-list-width: 300px;
+}
+
+.reserve-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.left {
+    width: calc(100% - var(--space-list-width));
+    height: 100%;
+    background-color: aqua;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    width: 100%;
+    height: 60px;
+    background-color: blue;
+}
+
+.info {
+    width: 100%;
+    height: 140px;
+    background-color: brown;
+}
+
+.seats {
+    width：100%;
+    height: calc(100% - 200px);
+    background-color: yellow;
+}
+
+.right {
+    height: 100%;
+    width: var(--space-list-width);
+    background-color: red;
+}

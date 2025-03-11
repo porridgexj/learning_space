@@ -1,0 +1,21 @@
+:root {
+    --right-width: 300px
+}
+
+.favours-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.left {
+    width: calc(100% - var(--right-width));
+    height: 100%;
+    background-color: aqua;
+}
+
+.right {
+    width: var(--right-width);
+    height: 100%;
+    background-color: red;
+}

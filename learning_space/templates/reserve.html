@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Reserve seat{% endblock %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/reserve.css' %}">
+{% endblock %}
+{% block content %}
+<div class="reserve-page">
+  <div class="left">
+    <div class="title"></div>
+    <div class="info"></div>
+    <div class="seats"></div>
+  </div>
+  <div class="right"></div>
+</div>
+{% endblock %}
