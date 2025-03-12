@@ -25,14 +25,14 @@ from learning_space.space.api_urls import urlpatterns as space_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
-    path('api/user', include('learning_space.user.api_urls')),
-    path('api/space', include('learning_space.space.api_urls')),
+    # path('api/user', include('learning_space.user.api_urls')),
+    # path('api/space', include('learning_space.space.api_urls')),
     path('api/', include(user_urls)),
     path('api/', include(space_urls)),
-    path('api/register/', api_views.register, name='register'), 
-    path('api/login/', api_views.login, name='login'),
-    path('api/', include('learning_space.user.api_urls')),
+    # path('api/register/', api_views.register, name='register'),
+    # path('api/login/', api_views.login, name='login'),
+    # path('api/', include('learning_space.user.api_urls')),
 ]
 
-urlpatterns.extend(user_urls)
-urlpatterns.extend(space_urls)
+# urlpatterns.extend(user_urls)
+# urlpatterns.extend(space_urls)

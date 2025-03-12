@@ -2,7 +2,7 @@ from django.urls import path,include
 from . import api_views
 from django.contrib import admin
 
-space_urls = [
+urlpatterns = [
     # 1. 查询教室列表接口（支持 sort_by=distance 或 sort_by=rating）
     path('api/v1/classrooms', api_views.classroom_list, name='classroom-list'),
     # 2. 根据教室ID查询教室详细信息
@@ -20,9 +20,6 @@ space_urls = [
     # 修改学习空间细节接口
     path('api/v1/learning_spaces/<int:classroom_id>/update', api_views.update_learning_space, name='update-learning-space'),
 ]
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('learning_space.user.api_urls')),  
-]
+
 
 
