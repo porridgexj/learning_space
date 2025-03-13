@@ -88,11 +88,15 @@
 .space .space-name {
   margin-right: 10px;
   font-weight: bold;
+  width: 200px;
+  overflow: hidden;
 }
 
 .space .space-rating {
   font-size: 22px;
   line-height: 22px;
+  display: flex;
+  align-items: center;
 }
 
 .map-area {

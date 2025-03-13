@@ -15,20 +15,33 @@ function drawMap() {
   }).addTo(map);
 }
 
-function getSpaceList() {
-  const spaceList = Array(20).fill({
-    name: 'Space 1',
-    rating: '★★★★★',
-  });
-  $('#space-container').empty();
-  for (space of spaceList) {
-    const newElement = $('#space-item-template').clone();
-    newElement.show();
-    newElement.removeAttr('id');
-    newElement.find('.space-name').text(space.name);
-    newElement.find('.space-rating').text(space.rating);
-    $('#space-container').append(newElement);
+function scoreToStars(score) {
+  let starsHtml = "";
+  for (let i = 1; i < score; i++) {
+    starsHtml += '<icon-star></icon-star>';
   }
+  if (Math.ceil(score) > score) {
+    starsHtml += '<icon-star-half></icon-star-half>';
+  }
+  return starsHtml;
+}
+
+function getSpaceList() {
+  let spaceList = [];
+  customAjax('GET', 'api/v1/classrooms').then(res => {
+    spaceList = res;
+    $('#space-container').empty();
+    for (space of spaceList) {
+      const newElement = $('#space-item-template').clone();
+      newElement.show();
+      newElement.removeAttr('id');
+      newElement.find('.space-name').text(space.space_name);
+      newElement.find('.space-rating').html(scoreToStars(space.score));
+      $('#space-container').append(newElement);
+    }
+  }).catch((e) => {
+    console.log(e);
+  });
 }
 
 function init() {
