@@ -7,21 +7,10 @@
 {% block content %}
 <div class="reserve-page">
   <div class="left">
-    <div class="title">
-      <span id="space-name"></span>
-      <span id="space-score"></span>
+    {% include "components/space-info.html" %}
+    <div class="seats">
+      <div id="seats-container"></div>
     </div>
-    <div class="info">
-      <div class="info-cover">
-        <div class="info-cover-wrapper">
-          <img src="{% static 'images/space1.webp' %}" alt="cover">
-        </div>
-      </div>
-      <div class="space-desc">
-        <div id="space-desc-content"></div>
-      </div>
-    </div>
-    <div class="seats"></div>
   </div>
   {% include "components/space-list.html" %}
 </div>

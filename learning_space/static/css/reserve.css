@@ -15,78 +15,22 @@
     flex-direction: column;
 }
 
-.title {
+#seats-container {
     width: 100%;
-    height: 60px;
     display: flex;
-    align-items: center;
-    padding-left: 20px;
-    ;
-}
-
-#space-name {
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    font-size: 24px;
-    line-height: 24px;
-    margin-right: 20px;
-}
-
-#space-score {
-    display: flex;
-    align-items: center;
-}
-
-.info {
-    width: 100%;
-    height: 140px;
-    display: flex;
-    align-items: center;
-}
-
-.info-cover {
-    width: 50%;
-    height: 100%;
-    padding-left: 10px;
-}
-
-.info-cover-wrapper {
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-.info-cover-wrapper img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-}
-
-.space-desc {
-    width: 50%;
-    height: 100%;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#space-desc-content {
-    width: 100%;
-    height: 100%;
-    border: 1px solid var(--border-color);
+    flex-wrap: wrap;
     border-radius: var(--border-radius);
-    padding: 20px;
-}
-
-.seats {
-    width: 100%;
-    height: calc(100% - 200px);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    flex-grow: 0;
 }
 
 .right {
     height: 100%;
     width: var(--space-list-width);
+}
+
+icon-seat {
+    width: 40px;
+    height: 60px;
 }

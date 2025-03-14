@@ -25,6 +25,7 @@ urlpatterns = [
     path('', views.index),
     path('login', views.login),
     path('reserve/<int:id>/', views.reserve),
+    path('comments/<int:id>/', views.comments),
     path('favours', views.favours),
 ]
 

@@ -14,14 +14,7 @@ function getSpaceDetail(id) {
     $('#space-name').text(space_name);
     $('#space-score').html(scoreToStars(score));
     $('#space-desc-content').text(description);
-    initSeats();
   });
-}
-
-function initSeats() {
-  for (let i = 0; i < 30; i++) {
-    $('#seats-container').append(`<icon-seat></icon-seat>`);
-  }
 }
 
 init();

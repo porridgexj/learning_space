@@ -16,6 +16,11 @@ def reserve(request, id):
     context = {}
     return HttpResponse(template.render(context, request))
 
+def comments(request, id):
+    template = loader.get_template("comments.html")
+    context = {}
+    return HttpResponse(template.render(context, request))
+
 def favours(request):
     template = loader.get_template("favours.html")
     context = {}
