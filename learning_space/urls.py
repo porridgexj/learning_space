@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('login', views.login),
-    path('reserve', views.reserve),
+    path('reserve/<int:id>/', views.reserve),
     path('favours', views.favours),
 ]
 

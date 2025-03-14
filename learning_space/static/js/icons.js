@@ -9,6 +9,9 @@ class IconStarHalf extends HTMLElement {
         <style>
           :host {
             display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 2px;
           }
           svg {
             width: 13px;
@@ -34,6 +37,9 @@ class IconStar extends HTMLElement {
     <style>
         :host {
           display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 2px;
         }
         svg {
           width: 12px;
@@ -47,5 +53,33 @@ class IconStar extends HTMLElement {
   }
 }
 
+class IconStarEmpty extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.render();
+  }
+  render() {
+    this.shadowRoot.innerHTML = `
+    <style>
+        :host {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 2px;
+        }
+        svg {
+          width: 13px;
+          color: var(--theme-color-1);
+        }
+    </style>
+    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path fill="currentColor" d="M1024 397.056l-353.792-51.392L512 25.088 353.792 345.664 0 397.056l256 249.536-60.416 352.32L512 832.576l316.416 166.336L768 646.592l256-249.536z m-512 356.416l-223.488 117.504 42.688-248.832L150.4 445.952l249.856-36.288L512 183.296l111.744 226.368 249.856 36.288-180.8 176.192 42.688 248.832L512 753.472z"></path>
+    </svg>
+    `;
+  }
+}
+
 customElements.define('icon-star', IconStar);
 customElements.define('icon-star-half', IconStarHalf);
+customElements.define('icon-star-empty', IconStarEmpty);

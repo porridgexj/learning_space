@@ -11,7 +11,7 @@ def login(request):
     context = {"is_login": True}
     return HttpResponse(template.render(context, request))
 
-def reserve(request):
+def reserve(request, id):
     template = loader.get_template("reserve.html")
     context = {}
     return HttpResponse(template.render(context, request))
