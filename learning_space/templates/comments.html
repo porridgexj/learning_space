@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Comments{% endblock %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/comments.css' %}">
+{% endblock %}
+{% block content %}
+<div class="comments-page">
+  <div class="left">
+    {% include "components/space-info.html" %}
+    <div class="rate-space">
+      <div class="rate-space-container">
+        <div class="rate-space-slogan">Rate this space!</div>
+        <div class="comment-input">
+          <textarea id="comment-textarea" placeholder="Input your comment..."></textarea>
+        </div>
+        <button id="submit-comment-button">Submit</button>
+      </div>
+    </div>
+    <div class="user-comments">
+      <div id="user-comments-container"></div>
+    </div>
+  </div>
+  {% include "components/space-list.html" %}
+</div>
+{% endblock %}
+{% block js %}
+<script src="{% static 'js/comments.js' %}"></script>
+{% endblock %}

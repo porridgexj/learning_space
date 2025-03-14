@@ -5,7 +5,8 @@
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}Learning space{% endblock %}</title>
-  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
   <link rel="stylesheet" href="{% static 'css/header.css' %}">
   <link rel="stylesheet" href="{% static 'css/utils/bootstrap.min.css' %}">
   {% block css %}
@@ -25,6 +26,8 @@
   </div>
   <script src="{% static 'js/utils/jquery-3.7.1.min.js' %}"></script>
   <script src="{% static 'js/utils/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/global.js' %}"></script>
+  <script src="{% static 'js/icons.js' %}"></script>
   {% block js %}
   <!-- page js -->
   {% endblock %}

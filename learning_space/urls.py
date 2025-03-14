@@ -32,6 +32,10 @@ urlpatterns = [
     # path('api/register/', api_views.register, name='register'),
     # path('api/login/', api_views.login, name='login'),
     # path('api/', include('learning_space.user.api_urls')),
+    path('login', views.login),
+    path('reserve/<int:id>/', views.reserve),
+    path('comments/<int:id>/', views.comments),
+    path('favours', views.favours),
 ]
 
 # urlpatterns.extend(user_urls)

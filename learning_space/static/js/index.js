@@ -1,5 +1,4 @@
 let map = null;
-let currentMapCenter = { lat: 55.8668275, lng: -4.2514823 };
 let mapType = window.localStorage.getItem('mapType') ?? 'normal';
 let mapSource = {
   'normal': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -15,25 +14,13 @@ function drawMap() {
   }).addTo(map);
 }
 
-function getSpaceList() {
-  const spaceList = Array(20).fill({
-    name: 'Space 1',
-    rating: '★★★★★',
-  });
-  $('#space-container').empty();
-  for (space of spaceList) {
-    const newElement = $('#space-item-template').clone();
-    newElement.show();
-    newElement.removeAttr('id');
-    newElement.find('.space-name').text(space.name);
-    newElement.find('.space-rating').text(space.rating);
-    $('#space-container').append(newElement);
-  }
-}
-
 function init() {
   drawMap();
   getSpaceList();
+  $("#spaces-sort-by").change(function () {
+    const selectedValue = $(this).val();
+    getSpaceList(selectedValue);
+  });
 }
 
 init();

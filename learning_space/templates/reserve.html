@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Reserve seat{% endblock %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/reserve.css' %}">
+{% endblock %}
+{% block content %}
+<div class="reserve-page">
+  <div class="left">
+    {% include "components/space-info.html" %}
+    <div class="seats">
+      <div class="seats-wrapper">
+        <div id="seats-container"></div>
+      </div>
+    </div>
+  </div>
+  {% include "components/space-list.html" %}
+  {% include "components/seat.html" %}
+</div>
+{% endblock %}
+{% block js %}
+<script src="{% static 'js/reserve.js' %}"></script>
+{% endblock %}

@@ -1,4 +1,19 @@
 <div class="header">
-  <div class="it-btn">Log in</div>
-  <div class="it-btn">Sign up</div>
+  <div class="header-left">
+    {% if not is_home %}
+    <a href="/">
+      <div class="it-btn">Home</div>
+    </a>
+    {% endif %}
+  </div>
+  <div class="header-right">
+    {% if not is_login %}
+    <a href="/login">
+      <div class="it-btn">Log in</div>
+    </a>
+    <a href="/login">
+      <div class="it-btn">Sign up</div>
+    </a>
+    {% endif %}
+  </div>
 </div>
