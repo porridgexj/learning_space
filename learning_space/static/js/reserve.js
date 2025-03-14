@@ -20,7 +20,11 @@ function getSpaceDetail(id) {
 
 function initSeats() {
   for (let i = 0; i < 30; i++) {
-    $('#seats-container').append(`<icon-seat></icon-seat>`);
+    const newEl = $('#seat-option').clone();
+    newEl.removeAttr('id');
+    newEl.attr('seat-id', i + 1);
+    newEl.show();
+    $('#seats-container').append(newEl);
   }
 }
 

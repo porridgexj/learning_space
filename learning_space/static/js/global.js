@@ -48,13 +48,17 @@ function getSpaceList(sortBy = 'distance') {
   customAjax('GET', '/api/v1/classrooms', params).then(res => {
     spaceList = res;
     $('#space-container').empty();
-    for (space of spaceList) {
-      const newElement = $('#space-item-template').clone();
-      newElement.show();
-      newElement.removeAttr('id');
-      newElement.find('.space-name').text(space.space_name);
-      newElement.find('.space-rating').html(scoreToStars(space.score));
-      $('#space-container').append(newElement);
+    for (let space of spaceList) {
+      const newEl = $('#space-item-template').clone();
+      newEl.show();
+      newEl.removeAttr('id');
+      newEl.attr('space-id', space.id);
+      newEl.find('.space-name').text(space.space_name);
+      newEl.find('.space-rating').html(scoreToStars(space.score));
+      newEl.click(() => {
+        goTo(`/reserve/${space.id}`);
+      });
+      $('#space-container').append(newEl);
     }
   }).catch((e) => {
     console.log(e);
@@ -66,6 +70,10 @@ function getUrlId() {
   const pathSegments = url.pathname.split('/');
   const id = pathSegments[pathSegments.length - 2];
   return id;
+}
+
+function goTo(url) {
+  window.location.href = url;
 }
 
 let currentMapCenter = { lat: 55.8668275, lng: -4.2514823 };

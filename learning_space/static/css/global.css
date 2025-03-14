@@ -223,10 +223,3 @@ select {
   border-radius: var(--border-radius);
   padding: 20px;
 }
-
-.seats {
-  width: 100%;
-  height: calc(100% - 200px);
-  display: flex;
-  padding: 20px;
-}

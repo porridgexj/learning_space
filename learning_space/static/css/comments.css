@@ -31,6 +31,7 @@
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
   padding: 10px;
+  position: relative;
 }
 
 #comment-textarea {
@@ -40,6 +41,12 @@
   resize: none;
   padding: 5px 10px;
   background-color: var(--input-bg-color);
+}
+
+#submit-comment-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 }
 
 .rate-space-slogan {

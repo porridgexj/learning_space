@@ -9,10 +9,13 @@
   <div class="left">
     {% include "components/space-info.html" %}
     <div class="seats">
-      <div id="seats-container"></div>
+      <div class="seats-wrapper">
+        <div id="seats-container"></div>
+      </div>
     </div>
   </div>
   {% include "components/space-list.html" %}
+  {% include "components/seat.html" %}
 </div>
 {% endblock %}
 {% block js %}

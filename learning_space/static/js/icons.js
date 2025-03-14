@@ -80,33 +80,6 @@ class IconStarEmpty extends HTMLElement {
   }
 }
 
-class IconSeat extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this.render();
-  }
-  render() {
-    this.shadowRoot.innerHTML = `
-    <style>
-        :host {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        svg {
-          width: 100%;
-          color: var(--theme-color-1);
-        }
-    </style>
-    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      <path fill="currentColor" d="M279.125333 917.376l68.224-254.464a42.666667 42.666667 0 1 1 82.389334 22.101333l-68.181334 254.464a42.666667 42.666667 0 0 1-82.432-22.101333z m465.408-1.28a42.666667 42.666667 0 0 1-82.432 22.101333l-55.594666-207.488a42.666667 42.666667 0 0 1 82.432-22.058666l55.594666 207.445333z" fill="#13227a" opacity=".3" p-id="2466"></path><path d="M314.026667 42.666667h395.946666a85.333333 85.333333 0 0 1 84.138667 99.370666l-65.792 394.794667a21.333333 21.333333 0 0 1-21.077333 17.834667H316.757333a21.333333 21.333333 0 0 1-21.077333-17.834667L229.888 142.08A85.333333 85.333333 0 0 1 314.069333 42.666667zM234.666667 597.333333h554.666666a64 64 0 0 1 0 128h-554.666666a64 64 0 0 1 0-128z"></path>
-    </svg>
-    `;
-  }
-}
-
 customElements.define('icon-star', IconStar);
 customElements.define('icon-star-half', IconStarHalf);
 customElements.define('icon-star-empty', IconStarEmpty);
-customElements.define('icon-seat', IconSeat);
