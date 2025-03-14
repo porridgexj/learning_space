@@ -28,11 +28,13 @@ function scoreToStars(score) {
 
 function getSpaceList(sortBy = 'distance') {
   let spaceList = [];
-  customAjax('GET', 'api/v1/classrooms', {
+  const isSortByDistance = sortBy === 'distance';
+  const params = {
     sort_by: sortBy,
-    longitude: currentMapCenter.lng,
-    latitude: currentMapCenter.lat,
-  }).then(res => {
+    longitude: isSortByDistance ? currentMapCenter.lng : undefined,
+    latitude: isSortByDistance ? currentMapCenter.lat : undefined,
+  }
+  customAjax('GET', 'api/v1/classrooms', params).then(res => {
     spaceList = res;
     $('#space-container').empty();
     for (space of spaceList) {
