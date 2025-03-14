@@ -1,15 +1,14 @@
 from django.http import HttpResponse
 from django.template import loader
 
-
 def index(request):
     template = loader.get_template("index.html")
-    context = {}
+    context = {"is_home": True}
     return HttpResponse(template.render(context, request))
 
 def login(request):
     template = loader.get_template("login.html")
-    context = {}
+    context = {"is_login": True}
     return HttpResponse(template.render(context, request))
 
 def reserve(request):

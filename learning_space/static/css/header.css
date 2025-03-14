@@ -7,14 +7,19 @@
   min-height: var(--header-height);
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   border-bottom: 1px solid #c8c8c8;
+  padding: 0 20px;
 }
 
-.header div {
-  margin-right: 20px;
+.header-left {
+  display: flex;
 }
 
-.header-button {
-  margin-right: 20px;
+.header-right {
+  display: flex;
+}
+
+.header-right>* {
+  margin-left: 20px;
 }

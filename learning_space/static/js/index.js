@@ -26,9 +26,13 @@ function scoreToStars(score) {
   return starsHtml;
 }
 
-function getSpaceList() {
+function getSpaceList(sortBy = 'distance') {
   let spaceList = [];
-  customAjax('GET', 'api/v1/classrooms').then(res => {
+  customAjax('GET', 'api/v1/classrooms', {
+    sort_by: sortBy,
+    longitude: currentMapCenter.lng,
+    latitude: currentMapCenter.lat,
+  }).then(res => {
     spaceList = res;
     $('#space-container').empty();
     for (space of spaceList) {
@@ -47,6 +51,10 @@ function getSpaceList() {
 function init() {
   drawMap();
   getSpaceList();
+  $("#spaces-sort-by").change(function () {
+    const selectedValue = $(this).val();
+    getSpaceList(selectedValue);
+  });
 }
 
 init();
