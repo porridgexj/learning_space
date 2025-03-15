@@ -5,6 +5,9 @@
       <div class="it-btn">Home</div>
     </a>
     {% endif %}
+    {% if is_login %}
+    <span id="header-nickname"></span>
+    {% endif %}
   </div>
   <div class="header-right">
     {% if not is_login and not is_login_page %}
@@ -13,6 +16,11 @@
     </a>
     <a href="/login">
       <div class="it-btn">Sign up</div>
+    </a>
+    {% endif %}
+    {% if not is_reservations_page %}
+    <a href="/reservations">
+      <div class="it-btn">My Reservations</div>
     </a>
     {% endif %}
     {% if is_login %}

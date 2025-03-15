@@ -43,7 +43,9 @@ body {
 }
 
 .it-btn {
-  width: 120px;
+  all: unset;
+  min-width: 60px;
+  padding: 0 20px;
   height: 30px;
   background-color: var(--theme-color-1);
   border-radius: 16px;
@@ -163,8 +165,8 @@ select {
   height: 60px;
   display: flex;
   align-items: center;
-  padding-left: 20px;
-  ;
+  padding: 0 20px;
+  justify-content: space-between;
 }
 
 #space-name {
@@ -237,4 +239,20 @@ select {
   transform: translateX(-50%);
   border-radius: 12px;
   color: var(--theme-color-1);
+}
+
+.display-flex {
+  display: flex !important;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.justify-content-center {
+  justify-content: center !important;
+}
+
+.justify-content-between {
+  justify-content: space-between !important;
 }

@@ -34,8 +34,10 @@ function initRegisterForm() {
 
 function login(email, passwd) {
   customAjax('POST', '/api/login', { email: email, password: passwd }).then(({ data }) => {
-    const { token } = data ?? {};
+    const { userid, email, nickname } = data ?? {};
+    setLocal('userid', userid);
     setLocal('email', email);
+    setLocal('nickname', nickname.slice(0, 10));
     goTo('/');
   }).catch(() => {
     showMsg('Login failed');

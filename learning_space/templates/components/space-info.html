@@ -1,7 +1,21 @@
 {% load static %}
 <div class="space-title">
-  <span id="space-name"></span>
-  <span id="space-score"></span>
+  <span class="display-flex align-items-center">
+    <span id="space-name"></span>
+    <span id="space-score"></span>
+  </span>
+  <span class="display-flex align-items-center">
+    {% if is_comments_page %}
+    <a id="view-reserve-btn">
+      <div class="it-btn">Reserve a seat</div>
+    </a>
+    {% endif %}
+    {% if is_reserve_page %}
+    <a id="view-comments-btn">
+      <div class="it-btn">View Comments</div>
+    </a>
+    {% endif %}
+  </span>
 </div>
 <div class="space-info">
   <div class="info-cover">

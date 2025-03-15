@@ -4,9 +4,8 @@ function customAjax(type, url, data, headers = {}) {
     $.ajax({
       type: type,
       url: baseUrl + url,
-      data: JSON.stringify(data),
+      data: type === "GET" ? data : JSON.stringify(data),
       beforeSend: function (xhr) {
-        xhr.setRequestHeader('authorization', getLocal('token'));
         for (let key in headers) {
           xhr.setRequestHeader(key, headers[key]);
         }
@@ -148,3 +147,5 @@ let msgZIndex = 1000;
 $('#log-out-button').click(() => {
   logout();
 });
+
+$('#header-nickname').text(`Welcome, ${getLocal('nickname')}`);

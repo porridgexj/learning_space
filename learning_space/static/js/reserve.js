@@ -1,5 +1,6 @@
 function init() {
   const id = getUrlId();
+  $('#view-comments-btn').attr('href', `/comments/${id}`);
   getSpaceDetail(id);
   getSpaceList();
   $("#spaces-sort-by").change(function () {
