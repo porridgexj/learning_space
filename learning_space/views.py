@@ -8,7 +8,7 @@ def index(request):
 
 def login(request):
     template = loader.get_template("login.html")
-    context = {"is_login": True}
+    context = {'is_login_page': True}
     return HttpResponse(template.render(context, request))
 
 def reserve(request, id):

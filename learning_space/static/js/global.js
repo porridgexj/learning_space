@@ -4,8 +4,9 @@ function customAjax(type, url, data, headers = {}) {
     $.ajax({
       type: type,
       url: baseUrl + url,
-      data: data,
+      data: JSON.stringify(data),
       beforeSend: function (xhr) {
+        xhr.setRequestHeader('authorization', getLocal('token'));
         for (let key in headers) {
           xhr.setRequestHeader(key, headers[key]);
         }
@@ -13,8 +14,8 @@ function customAjax(type, url, data, headers = {}) {
       success: function (response) {
         resolve(response);
       },
-      error: function (xhr, status, error) {
-        reject(error);
+      error: function (xhr) {
+        reject(xhr.responseJSON);
       }
     });
   });
@@ -76,4 +77,74 @@ function goTo(url) {
   window.location.href = url;
 }
 
+function setLocal(key, value) {
+  window.localStorage.setItem(key, value);
+}
+
+function getLocal(key) {
+  return window.localStorage.getItem(key);
+}
+
+function removeLocal(key) {
+  window.localStorage.removeItem(key);
+}
+
+function showMsg(text = '', type = 'error') {
+  const newMsgId = msgId++;
+  const newMsgZIndex = msgZIndex++;
+  let bgColor = 'rgb(130, 193, 127)';
+  if (type === 'error') {
+    bgColor = 'rgb(249, 157, 157)';
+  }
+  let newMsg = $("#global-message").clone();
+  newMsg.attr("msg-id", newMsgId);
+  newMsg.find("#global-message-text").text(text);
+  newMsg.removeAttr('id');
+  let initTop = '-76px';
+  let targetTop = '20px';
+  newMsg.css({
+    "z-index": newMsgZIndex,
+    "top": initTop,
+    "background": bgColor,
+  });
+  $("body").append(newMsg);
+  newMsg.show();
+  console.log(anime());
+  anime({
+    targets: `[msg-id="${newMsgId}"]`,
+    top: [initTop, targetTop],
+    duration: 200,
+    easing: "easeOutQuad",
+    complete: function () {
+      setTimeout(function () {
+        anime({
+          targets: `[msg-id="${newMsgId}"]`,
+          top: [targetTop, initTop],
+          duration: 200,
+          easing: "easeInQuad",
+          complete: function () {
+            $(`[msg-id="${newMsgId}"]`).remove();
+          }
+        });
+      }, 3000);
+    }
+  });
+}
+
+function logout() {
+  customAjax('POST', '/api/logout').finally(() => {
+    refresh();
+  });
+}
+
+function refresh() {
+  location.reload();
+}
+
 let currentMapCenter = { lat: 55.8668275, lng: -4.2514823 };
+let msgId = 1;
+let msgZIndex = 1000;
+
+$('#log-out-button').click(() => {
+  logout();
+});

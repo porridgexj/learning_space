@@ -10,10 +10,10 @@
     <div class="left">
       <div class="it-form-title">Log in</div>
       <form onsubmit="return false" id="login-form" class="it-form">
-        <div class="it-form-label">Username</div>
-        <input class="it-form-input it-input" placeholder="Username" required>
+        <div class="it-form-label">Email</div>
+        <input name="email" class="it-form-input it-input" placeholder="Email" required>
         <div class="it-form-label">Password</div>
-        <input class="it-form-input it-input" type="password" placeholder="Password" required>
+        <input name="password" class="it-form-input it-input" type="password" placeholder="Password" required>
         <button id="login-button" class="it-btn" type="submit">Log in</button>
       </form>
     </div>
@@ -21,12 +21,15 @@
       <div class="no-account-slogan">Don't have an account yet?</div>
       <div class="it-form-title">Sign up</div>
       <form onsubmit="return false" id="register-form" class="it-form">
-        <div class="it-form-label">Username</div>
-        <input class="it-form-input it-input" placeholder="Username" required>
+        <div class="it-form-label">Email</div>
+        <input name="register-email" class="it-form-input it-input" placeholder="Email" required>
+        <div class="it-form-label">Nickname</div>
+        <input name="register-nickname" class="it-form-input it-input" placeholder="Nickname" required>
         <div class="it-form-label">Password</div>
-        <input class="it-form-input it-input" type="password" placeholder="Password" required>
+        <input name="register-pw" class="it-form-input it-input" type="password" placeholder="Password" required>
         <div class="it-form-label">Confirm Password</div>
-        <input class="it-form-input it-input" type="password" placeholder="Confirm Password" required>
+        <input name="register-confirm-pw" class="it-form-input it-input" type="password" placeholder="Confirm Password"
+          required>
         <button id="register-button" class="it-btn" type="submit">Sign up</button>
       </form>
     </div>

@@ -22,10 +22,13 @@
       <!-- page content -->
       {% endblock %}
     </div>
-
+    <div id="global-message" class="global-message" style="display: none">
+      <span id="global-message-text"></span>
+    </div>
   </div>
   <script src="{% static 'js/utils/jquery-3.7.1.min.js' %}"></script>
   <script src="{% static 'js/utils/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/utils/anime.min.js' %}"></script>
   <script src="{% static 'js/global.js' %}"></script>
   <script src="{% static 'js/icons.js' %}"></script>
   {% block js %}
