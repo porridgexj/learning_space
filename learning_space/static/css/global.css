@@ -169,6 +169,24 @@ select {
   justify-content: space-between;
 }
 
+.space-title-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.space-title-right>* {
+  margin-left: 10px;
+}
+
+.favourite-button {
+  background-color: rgb(174, 89, 89);
+}
+
+.favourite-button:hover {
+  background-color: rgb(174, 89, 89, 0.8);
+}
+
 #space-name {
   display: flex;
   align-items: center;
@@ -223,7 +241,7 @@ select {
   height: 100%;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  padding: 20px;
+  padding: 14px 20px;
 }
 
 .global-message {
@@ -255,4 +273,20 @@ select {
 
 .justify-content-between {
   justify-content: space-between !important;
+}
+
+#header-nickname {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.reservations-button {
+  background-color: rgb(90, 90, 138);
+  ;
+}
+
+.reservations-button:hover {
+  background-color: rgb(90, 90, 138, 0.8);
+  ;
 }

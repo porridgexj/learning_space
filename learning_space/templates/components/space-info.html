@@ -4,13 +4,14 @@
     <span id="space-name"></span>
     <span id="space-score"></span>
   </span>
-  <span class="display-flex align-items-center">
+  <span class="space-title-right">
     {% if is_comments_page %}
     <a id="view-reserve-btn">
       <div class="it-btn">Reserve a seat</div>
     </a>
     {% endif %}
     {% if is_reserve_page %}
+    <div class="it-btn favourite-button">Favorite</div>
     <a id="view-comments-btn">
       <div class="it-btn">View Comments</div>
     </a>

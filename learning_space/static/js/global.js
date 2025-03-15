@@ -13,7 +13,7 @@ function customAjax(type, url, data, headers = {}) {
       success: function (response) {
         resolve(response);
       },
-      error: function (xhr) {
+      error: function (xhr, status, error) {
         reject(xhr.responseJSON);
       }
     });

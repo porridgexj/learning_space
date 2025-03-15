@@ -5,7 +5,14 @@
 <link rel="stylesheet" href="{% static 'css/reservations.css' %}">
 {% endblock %}
 {% block content %}
-
+<div class="reservation-page">
+  <div class="reserve-left">
+    <div class="reserve-title">My reservations</div>
+  </div>
+  <div class="reserve-right">
+    <div class="reserve-title">Favorite Spaces</div>
+  </div>
+</div>
 {% endblock %}
 {% block js %}
 <script src="{% static 'js/reservations.js' %}"></script>
