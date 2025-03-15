@@ -18,7 +18,7 @@
       <div class="it-btn">Sign up</div>
     </a>
     {% endif %}
-    {% if not is_reservations_page %}
+    {% if is_login and not is_reservations_page %}
     <a href="/reservations">
       <div class="it-btn reservations-button">My Reservations</div>
     </a>
