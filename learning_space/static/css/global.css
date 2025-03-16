@@ -147,15 +147,15 @@ select {
   width: 105px;
 }
 
-.space-container::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 8px;
 }
 
-.space-container::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   background-color: var(--theme-color-2);
 }
 
-.space-container::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background-color: rgba(81, 74, 56, 0.7);
   border-radius: 4px;
 }
@@ -316,4 +316,22 @@ select {
   --map-icon-space-color: rgb(62, 88, 236);
   color: var(--map-icon-space-color);
   border: 1px solid var(--map-icon-space-color);
+}
+
+.dialog-template {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 99;
+  background-color: rgb(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-template-content {
+  background-color: var(--theme-color-2);
+  min-width: 400px;
+  min-height: 250px;
+  border-radius: var(--border-radius);
 }

@@ -257,6 +257,7 @@ def book_seat(request):
     )
 
 
+@csrf_exempt
 def cancel_booking(request):
     if request.method != "POST":
         return JsonResponse({"error": "Method not allowed"}, status=405)

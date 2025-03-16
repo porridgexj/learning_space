@@ -29,4 +29,74 @@
   font-weight: bold;
   font-size: 32px;
   line-height: 32px;
+  margin-bottom: 10px;
+}
+
+.reserve-history {
+  width: 100%;
+  height: calc(100% - 70px);
+}
+
+#reserve-history {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.reserve-item-template {
+  width: calc((100% - 20px * 3) / 2);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  height: 200px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.reserve-item-template>* {
+  margin-bottom: 10px;
+}
+
+.cancel-btn {
+  text-decoration: underline;
+  color: rgb(255, 111, 111);
+}
+
+.details-btn {
+  text-decoration: underline;
+  color: rgb(52, 109, 52);
+}
+
+.reserve-buttons {
+  display: flex;
+}
+
+.reserve-buttons>* {
+  margin-right: 10px;
+}
+
+.space-name {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.seat-id {
+  display: flex;
+  align-items: center;
+  align-items: center;
+}
+
+.start-time {
+  display: flex;
+  align-items: center;
+  align-items: center;
+}
+
+.end-time {
+  display: flex;
+  align-items: center;
+  align-items: center;
 }

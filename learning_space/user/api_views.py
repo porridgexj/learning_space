@@ -143,16 +143,15 @@ def get_favourite_spaces(request):
 
 @require_http_methods(["GET"])
 def get_booking_history(request):
-    """根据邮箱查询用户的预订历史"""
-    email = request.GET.get("email", "").strip()
+    user_id = request.GET.get("id", "").strip()
 
-    if not email:
-        return JsonResponse({"code": 400, "message": "邮箱不能为空"}, status=400)
+    if not user_id:
+        return JsonResponse({"code": 400, "message": "missing fields"}, status=400)
 
     try:
-        user = User.objects.get(email=email)
+        user = User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return JsonResponse({"code": 404, "message": "用户不存在"}, status=404)
+        return JsonResponse({"code": 404, "message": "invalid params"}, status=404)
 
     bookings = (
         Booking.objects.filter(user=user)
@@ -166,9 +165,9 @@ def get_booking_history(request):
             "create_time",
         )
         .order_by("-start_time")
-    )  # 按预订开始时间排列
+    )
 
-    return JsonResponse({"code": 200, "message": "查询成功", "data": list(bookings)})
+    return JsonResponse({"code": 200, "message": "ok", "data": list(bookings)})
 
 
 @csrf_exempt
@@ -241,31 +240,33 @@ def submit_comment(request):
 
 @require_http_methods(["GET"])
 def get_comments(request):
-    """查询用户对特定学习空间的评论"""
-    email = request.GET.get("email", "").strip()
     space_id = request.GET.get("space_id", "").strip()
 
-    if not email or not space_id:
-        return JsonResponse(
-            {"code": 400, "message": "邮箱和学习空间 ID 不能为空"}, status=400
-        )
+    if not space_id:
+        return JsonResponse({"code": 400, "message": "missing fields"}, status=400)
 
-    comments = Comment.objects.filter(
-        user__email=email, space__id=space_id, status=0
-    ).values("id", "comment_description", "score", "create_time")
+    comments = (
+        Comment.objects.filter(space__id=space_id, status=0)
+        .select_related("user")
+        .order_by("-create_time")
+        .values("id", "comment_description", "score", "create_time", "user__nickname")
+    )
 
-    # 计算该学习空间的平均评分
-    average_score = Comment.objects.filter(space__id=space_id, status=0).aggregate(
-        Avg("score")
-    )["score__avg"]
+    comments_list = [
+        {
+            "id": c["id"],
+            "comment": c["comment_description"],
+            "score": c["score"],
+            "created_time": c["create_time"],
+            "nickname": c["user__nickname"],
+        }
+        for c in comments
+    ]
 
     return JsonResponse(
         {
             "code": 200,
             "message": "查询成功",
-            "data": list(comments),
-            "average_score": (
-                round(average_score, 2) if average_score else None
-            ),  # 四舍五入保留两位小数
+            "data": comments_list,
         }
     )

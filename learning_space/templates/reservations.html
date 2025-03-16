@@ -8,6 +8,30 @@
 <div class="reservation-page">
   <div class="reserve-left">
     <div class="reserve-title">My reservations</div>
+    <div class="reserve-history">
+      <div id="reserve-history"></div>
+    </div>
+    <div id="reserve-item-template" class="reserve-item-template" style="display: none">
+      <div class="space-name"></div>
+      <div class="seat-id">
+        <div class="fw-bold">Seat ID:</div>
+        <div class="seat-id-value"></div>
+      </div>
+      <div class="start-time">
+        <div class="fw-bold">Start time:</div>
+        <div class="start-time-value"></div>
+      </div>
+      <div class="end-time">
+        <div class="fw-bold">End time:</div>
+        <div class="end-time-value"></div>
+      </div>
+      <div class="reserve-buttons">
+        <a class="details-btn-link">
+          <div class="details-btn">Details</div>
+        </a>
+        <div class="cancel-btn">Cancel</div>
+      </div>
+    </div>
   </div>
   <div class="reserve-right">
     <div class="reserve-title">Favorite Spaces</div>
