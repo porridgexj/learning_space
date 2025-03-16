@@ -290,3 +290,30 @@ select {
   background-color: rgb(90, 90, 138, 0.8);
   ;
 }
+
+.map-icon {
+  width: 30px !important;
+  height: 30px !important;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px;
+}
+
+.map-icon svg {
+  width: 100%;
+}
+
+.map-icon-user {
+  --map-icon-user-color: rgb(215, 53, 104);
+  color: var(--map-icon-user-color);
+  border: 1px solid var(--map-icon-user-color);
+}
+
+.map-icon-space {
+  --map-icon-space-color: rgb(62, 88, 236);
+  color: var(--map-icon-space-color);
+  border: 1px solid var(--map-icon-space-color);
+}

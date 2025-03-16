@@ -19,8 +19,8 @@ function getSpaceDetail(id) {
   });
 }
 
-function initSeats() {
-  for (let i = 0; i < 30; i++) {
+function initSeats(num = 30) {
+  for (let i = 0; i < num; i++) {
     const newEl = $('#seat-option').clone();
     newEl.removeAttr('id');
     newEl.attr('seat-id', i + 1);
