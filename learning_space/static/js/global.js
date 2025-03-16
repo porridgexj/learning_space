@@ -163,6 +163,14 @@ function getSpaceInfo(id) {
   return globalSpaceList.find(space => space.id === id);
 }
 
+function addFavour(userid, spaceid) {
+  customAjax('POST', '/api/add-favourite', { userid, spaceid }).then(() => {
+    showMsg('Added to favourites', 'success');
+  }).catch(() => {
+    showMsg('Failed to add to favourites');
+  });
+}
+
 let currentMapCenter = { lat: 55.86567951095817, lng: -4.2657280003186315 };
 let msgId = 1;
 let msgZIndex = 1000;

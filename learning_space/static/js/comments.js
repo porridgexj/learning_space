@@ -34,10 +34,10 @@ function getComments() {
       console.log(comment);
       const newEl = $('#user-comment-template').clone();
       newEl.removeAttr('id');
-      newEl.find('.user-name').text(comment.nickname);
+      newEl.find('.username').text(comment.nickname);
       newEl.find('.rating').text(comment.score);
       newEl.find('.comment').text(comment.comment);
-      newEl.find('.created-time').text(dayjs(comment.created_time).format('YYYY-MM-DD HH:mm'));
+      newEl.find('.created-time').text(dayjs(comment.created_time).format('YYYY-MM-DD HH:mm:ss'));
       $('#user-comments-container').append(newEl);
       newEl.show();
     }

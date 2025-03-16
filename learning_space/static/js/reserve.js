@@ -9,6 +9,9 @@ function init() {
     const selectedValue = $(this).val();
     getSpaceList(selectedValue);
   });
+  $('#favourite-btn').click(() => {
+    addFavour(getLocal('userid'), getUrlId());
+  });
 }
 
 function getSpaceDetail(id) {

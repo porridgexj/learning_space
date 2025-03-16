@@ -35,6 +35,7 @@
 .reserve-history {
   width: 100%;
   height: calc(100% - 70px);
+  overflow-y: scroll;
 }
 
 #reserve-history {
@@ -99,4 +100,36 @@
   display: flex;
   align-items: center;
   align-items: center;
+}
+
+#favourites-container {
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+.favourite-template {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+}
+
+.favourite-template .space-name {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.delete-btn {
+  text-decoration: underline;
+  cursor: pointer;
+  color: rgb(255, 106, 106);
+  width: 50px;
 }

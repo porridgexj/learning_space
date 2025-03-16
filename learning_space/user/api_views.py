@@ -122,23 +122,21 @@ def logout(request):
 @csrf_exempt
 @require_http_methods(["GET"])
 def get_favourite_spaces(request):
-    """根据邮箱查询用户收藏的学习空间列表"""
-    email = request.GET.get("email", "").strip()  # 从 GET 请求获取 email 参数
+    userid = request.GET.get("id", "").strip()
 
-    if not email:
-        return JsonResponse({"code": 400, "message": "邮箱不能为空"}, status=400)
+    if not userid:
+        return JsonResponse({"code": 400, "message": "missing fields"}, status=400)
 
     try:
-        user = User.objects.get(email=email)  # 查询用户
+        user = User.objects.get(id=userid)
     except User.DoesNotExist:
-        return JsonResponse({"code": 404, "message": "用户不存在"}, status=404)
+        return JsonResponse({"code": 404, "message": "invalid params"}, status=404)
 
-    # 获取该用户的收藏学习空间列表
     favourites = FavouriteSpace.objects.filter(user=user, status=0).values(
         "id", "space__id", "space__space_name", "create_time"
     )
 
-    return JsonResponse({"code": 200, "message": "查询成功", "data": list(favourites)})
+    return JsonResponse({"code": 200, "message": "ok", "data": list(favourites)})
 
 
 @require_http_methods(["GET"])
@@ -270,3 +268,36 @@ def get_comments(request):
             "data": comments_list,
         }
     )
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def add_favourite_space(request):
+    data = json.loads(request.body)
+    user_id = data.get("userid")
+    space_id = data.get("spaceid")
+    if not user_id or not space_id:
+        return JsonResponse({"code": 400, "message": "missing fields"}, status=400)
+
+    FavouriteSpace.objects.get_or_create(
+        user_id=user_id, space_id=space_id, defaults={"status": 0}
+    )
+
+    return JsonResponse({"code": 200, "message": "ok"})
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def delete_favourite_space(request):
+    data = json.loads(request.body)
+    id = data.get("id")
+
+    if not id:
+        return JsonResponse({"code": 400, "message": "missing fields"}, status=400)
+
+    try:
+        favourite = FavouriteSpace.objects.get(id=id)
+        favourite.delete()
+        return JsonResponse({"code": 200, "message": "deleted successfully"})
+    except FavouriteSpace.DoesNotExist:
+        return JsonResponse({"code": 404, "message": "favourite not found"}, status=404)

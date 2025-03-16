@@ -73,6 +73,7 @@
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
   padding: 10px;
+  overflow-y: scroll;
 }
 
 .rating-area {
@@ -99,4 +100,15 @@
 
 #submit-comment-button {
   margin-left: 10px;
+}
+
+.user-comment-template .comment {
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.user-comment-template .username {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 18px;
 }

@@ -20,8 +20,36 @@ function getReservations() {
   });
 }
 
+function delFavour(id) {
+  customAjax("POST", '/api/del-favourite', { id }).then(() => {
+    getFavourites();
+  });
+}
+
+function getFavourites() {
+  customAjax("GET", '/api/favourites', { id: getLocal('userid') }).then(({ data }) => {
+    const favours = data ?? [];
+    $('#favourites-container').empty();
+    for (const favour of favours) {
+      const newEl = $('#favourite-template').clone();
+      newEl.removeAttr('id');
+      newEl.find('.space-name').text(favour.space__space_name);
+      newEl.find('.delete-btn').click((e) => {
+        e.stopPropagation();
+        delFavour(favour.id);
+      });
+      newEl.click(() => {
+        goTo('/reserve/' + favour.space__id);
+      });
+      $('#favourites-container').append(newEl);
+      newEl.show();
+    }
+  });
+}
+
 function init() {
   getReservations();
+  getFavourites();
 }
 
 init();
