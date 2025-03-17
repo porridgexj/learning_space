@@ -12,9 +12,9 @@ from learning_space.user.models import LearningSpace, Booking, Comment, User, Se
 
 def haversine(lon1, lat1, lon2, lat2):
     """
-    计算两个经纬度之间的球面距离（单位：公里）
+    Calculate the great-circle distance between two points on Earth (in kilometers)
     """
-    # 将十进制度数转换为弧度
+    # Convert decimal degrees to radians
     lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2])
     dlon = lon2 - lon1
     dlat = lat2 - lat1
@@ -23,7 +23,7 @@ def haversine(lon1, lat1, lon2, lat2):
         + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
     )
     c = 2 * math.asin(math.sqrt(a))
-    r = 6371  # 地球半径，单位为公里
+    r = 6371  # Earth's radius in kilometers
     return c * r
 
 
@@ -37,10 +37,10 @@ def haversine(lon1, lat1, lon2, lat2):
 #     return R * c
 
 
-# 1. 查询教室列表接口（支持按距离/评分排序）
+# 1. Retrieve classroom list endpoint (supports sorting by distance/rating)
 def classroom_list(request):
     sort_by = request.GET.get("sort_by", "")
-    # 获取传入的经度和纬度参数
+    # Get parameters from request
     lon_param = request.GET.get("longitude", None)
     lat_param = request.GET.get("latitude", None)
 
@@ -72,7 +72,7 @@ def classroom_list(request):
                 "seat_num": space.seat_num,
                 "left_seat_num": space.left_seat_num,
                 "score": float(space.score),
-                "status": space.get_status_display(),  # 'Open' 或 'Closed'
+                "status": space.get_status_display(),  # 'Open' or 'Closed'
                 "distance": distance,
                 "latitude": float(space.latitude),
                 "longitude": float(space.longitude),
@@ -80,20 +80,19 @@ def classroom_list(request):
         )
 
     if sort_by == "distance" and user_lon is not None and user_lat is not None:
-        # 如果距离可计算，则按照距离升序排序，距离为 None 的排在最后
         results.sort(
             key=lambda x: x["distance"] if x["distance"] is not None else float("inf")
         )
     elif sort_by == "rating":
         results.sort(key=lambda x: x["score"], reverse=True)
     else:
-        # 默认按照评分降序
+        # Default sorting by rating in descending order
         results.sort(key=lambda x: x["score"], reverse=True)
 
     return JsonResponse(results, safe=False)
 
 
-# 2. 根据教室ID查询教室详细信息
+# 2. Retrieve detailed classroom information by classroom ID
 def classroom_detail(request, classroom_id):
     space = get_object_or_404(LearningSpace, pk=classroom_id)
     data = {
@@ -112,33 +111,32 @@ def classroom_detail(request, classroom_id):
     return JsonResponse(data)
 
 
-# 3. 根据教室ID查询座位预定数据
+# 3. Retrieve seat booking data by classroom ID
 def classroom_booking_list(request, classroom_id):
-    # 获取教室对象
+    # Get classroom object
     space = get_object_or_404(LearningSpace, pk=classroom_id)
 
-    # 生成全量座位列表：1 到 seat_num
+    # Generate full seat list: 1 to seat_num
     full_seat_list = list(range(1, space.seat_num + 1))
 
     now = timezone.now()
 
-    # 查询最近一天内且当前时间小于预定结束时间的预定记录（视为占用）
     active_bookings = Booking.objects.filter(
         space_id=classroom_id,
         create_time__gte=now - timedelta(days=1),
         end_time__gt=now,
     )
-    # 收集预定记录中的座位号
+    # Collect seat numbers from booking records
     occupied_seats = set(b.seat_no for b in active_bookings)
 
-    # 查询该教室所有 Seat 记录，收集维修中（status == 2）的座位号
+    # Query all Seat records for this classroom, collecting seats under maintenance (status == 2)
     maintenance_seats = set()
     seat_objs = Seat.objects.filter(space=space)
     for seat in seat_objs:
         if seat.status == 2:
             maintenance_seats.add(seat.seat_no)
 
-    # 构造返回的座位状态列表：每个对象包含 index 和 status
+    # Construct seat status list: each object contains index and status
     seat_status_list = []
     for seat_no in full_seat_list:
         if seat_no in maintenance_seats:
@@ -149,19 +147,17 @@ def classroom_booking_list(request, classroom_id):
             status = 0
         seat_status_list.append({"index": seat_no, "status": status})
 
-    # 计算当前可用座位数量（状态为 0 的个数）
+    # Calculate current available seat count (status == 0)
     available_count = sum(1 for seat in seat_status_list if seat["status"] == 0)
 
-    # 更新 LearningSpace 表中的 left_seat_num 字段
+    # Update left_seat_num field in LearningSpace table
     space.left_seat_num = available_count
     space.save(update_fields=["left_seat_num"])
 
-    # 返回数据
     data = {
         "classroom_id": classroom_id,
         "seat_status_list": seat_status_list,
         "available_seat_count": available_count,
-        # 如有需要，可同时返回部分有效预定记录信息
         "active_bookings": [
             {
                 "seat_no": b.seat_no,
@@ -176,7 +172,7 @@ def classroom_booking_list(request, classroom_id):
     return JsonResponse(data)
 
 
-# 4. 根据教室ID和用户email查询该教室全部评分和评论信息
+# 4. Retrieve all ratings and review information for a classroom by classroom ID and user email
 def classroom_review_list(request, classroom_id):
     email = request.GET.get("email", "")
     reviews = Comment.objects.filter(space_id=classroom_id)
@@ -218,20 +214,19 @@ def book_seat(request):
     if not all(field in data for field in required_fields):
         return JsonResponse({"error": "Missing required parameters"}, status=400)
 
-    # 获取用户
     try:
         user = User.objects.get(email=data["user_email"])
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found"}, status=404)
 
-    # 解析预定时间段
+    # Parse booking time period
     start_time = parse_datetime(data["start_time"])
     end_time = parse_datetime(data["end_time"])
     if start_time is None or end_time is None:
         return JsonResponse({"error": "Invalid start_time or end_time"}, status=400)
 
     now = timezone.now()
-    # 检查当前时间起未来两小时内是否已有该座位的预定记录
+    # Check if the seat is already booked within the next 6 hours from now
     active_existing = Booking.objects.filter(
         space_id=data["classroom_id"],
         seat_no=data["seat_no"],
@@ -240,10 +235,10 @@ def book_seat(request):
     )
     if active_existing.exists():
         return JsonResponse(
-            {"error": "Seat already booked within the next two hours"}, status=400
+            {"error": "Seat already booked within the next six hours"}, status=400
         )
 
-    # 如果没有冲突，则创建预定记录
+    # If no conflicts, create booking record
     booking = Booking.objects.create(
         user=user,
         space_id=data["classroom_id"],
@@ -332,7 +327,7 @@ def update_learning_space(request, classroom_id):
     except LearningSpace.DoesNotExist:
         return JsonResponse({"error": "Learning space not found"}, status=404)
 
-    # 更新可修改的字段
+    # Update editable fields
     fields = [
         "space_name",
         "description",

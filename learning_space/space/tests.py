@@ -6,16 +6,17 @@ from datetime import timedelta
 from learning_space.user.models import LearningSpace, User, Booking, Comment, Seat
 import json
 
+
 class SpaceAPITestCase(TestCase):
     def setUp(self):
-        # 创建测试用户
+        # Create test user
         self.user = User.objects.create(
             email='test@example.com',
             password='testpassword',
             nickname='Test User'
         )
-        
-        # 创建测试学习空间
+
+        # Create test learning space
         self.space = LearningSpace.objects.create(
             space_name='Test Space',
             description='Test Description',
@@ -24,18 +25,18 @@ class SpaceAPITestCase(TestCase):
             score=Decimal('4.5'),
             longitude=Decimal('116.3'),
             latitude=Decimal('39.9'),
-            status=1,  # 假设1代表开放状态
+            status=1,  # Assume 1 represents open status
             img_cover='test.jpg'
         )
-        
-        # 创建测试座位
+
+        # Create test seat
         self.seat = Seat.objects.create(
             space=self.space,
             seat_no=1,
-            status=1  # 假设1代表正常状态
+            status=1  # Assume 1 represents normal status
         )
-        
-        # 创建测试预订
+
+        # Create test booking
         self.booking = Booking.objects.create(
             user=self.user,
             space=self.space,
@@ -43,37 +44,37 @@ class SpaceAPITestCase(TestCase):
             start_time=timezone.now(),
             end_time=timezone.now() + timedelta(hours=2)
         )
-        
-        # 创建测试评论
+
+        # Create test comment
         self.comment = Comment.objects.create(
             user=self.user,
             space=self.space,
             comment_description='Test Comment',
             score=Decimal('4.5'),
-            status=1  # 假设1代表有效状态
+            status=1  # Assume 1 represents active status
         )
-        
+
         self.client = Client()
-    
+
     def test_classroom_list(self):
-        # 测试默认排序
+        # Test default sorting
         response = self.client.get(reverse('classroom-list'))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
         self.assertTrue(isinstance(data, list))
         self.assertTrue(len(data) > 0)
-        
-        # 测试按评分排序
+
+        # Test sorting by rating
         response = self.client.get(reverse('classroom-list') + '?sort_by=rating')
         self.assertEqual(response.status_code, 200)
-        
-        # 测试按距离排序
+
+        # Test sorting by distance
         response = self.client.get(
-            reverse('classroom-list') + 
+            reverse('classroom-list') +
             '?sort_by=distance&longitude=116.4&latitude=39.9'
         )
         self.assertEqual(response.status_code, 200)
-    
+
     def test_classroom_detail(self):
         response = self.client.get(
             reverse('classroom-detail', args=[self.space.id])
@@ -82,13 +83,13 @@ class SpaceAPITestCase(TestCase):
         data = json.loads(response.content)
         self.assertEqual(data['space_name'], 'Test Space')
         self.assertEqual(data['description'], 'Test Description')
-        
-        # 测试不存在的教室ID
+
+        # Test non-existent classroom ID
         response = self.client.get(
             reverse('classroom-detail', args=[99999])
         )
         self.assertEqual(response.status_code, 404)
-    
+
     def test_classroom_booking_list(self):
         response = self.client.get(
             reverse('classroom-bookings', args=[self.space.id])
@@ -98,17 +99,17 @@ class SpaceAPITestCase(TestCase):
         self.assertIn('seat_status_list', data)
         self.assertIn('available_seat_count', data)
         self.assertIn('active_bookings', data)
-    
+
     def test_classroom_review_list(self):
-        # 测试获取所有评论
+        # Test retrieving all reviews
         response = self.client.get(
             reverse('classroom-reviews', args=[self.space.id])
         )
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
         self.assertIn('reviews', data)
-        
-        # 测试按用户筛选评论
+
+        # Test filtering reviews by user
         response = self.client.get(
             reverse('classroom-reviews', args=[self.space.id]) +
             f'?email={self.user.email}'
@@ -116,9 +117,9 @@ class SpaceAPITestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
         self.assertTrue(len(data['reviews']) > 0)
-    
+
     def test_book_seat(self):
-        # 测试成功预订座位
+        # Test successful seat booking
         booking_data = {
             'user_email': self.user.email,
             'classroom_id': self.space.id,
@@ -132,12 +133,12 @@ class SpaceAPITestCase(TestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, 200)
-        
-        # 测试无效的请求数据
+
+        # Test invalid request data
         invalid_data = {
             'user_email': self.user.email,
             'classroom_id': self.space.id
-            # 缺少必要字段
+            # Missing required fields
         }
         response = self.client.post(
             reverse('book-seat'),
@@ -145,9 +146,9 @@ class SpaceAPITestCase(TestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, 400)
-    
+
     def test_cancel_booking(self):
-        # 测试成功取消预订
+        # Test successful booking cancellation
         cancel_data = {
             'booking_id': self.booking.id
         }
@@ -157,8 +158,8 @@ class SpaceAPITestCase(TestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, 200)
-        
-        # 测试取消不存在的预订
+
+        # Test cancelling non-existent booking
         invalid_cancel_data = {
             'booking_id': -1
         }

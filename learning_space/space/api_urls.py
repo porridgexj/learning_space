@@ -1,25 +1,22 @@
-from django.urls import path,include
+from django.urls import path, include
 from . import api_views
 from django.contrib import admin
 
 urlpatterns = [
-    # 1. 查询教室列表接口（支持 sort_by=distance 或 sort_by=rating）
+    # 1. Retrieve classroom list (supports sort_by=distance or sort_by=rating)
     path('api/v1/classrooms', api_views.classroom_list, name='classroom-list'),
-    # 2. 根据教室ID查询教室详细信息
+    # 2. Retrieve detailed information of a classroom by classroom ID
     path('api/v1/classrooms/<int:classroom_id>', api_views.classroom_detail, name='classroom-detail'),
-    # 3. 根据教室ID查询座位预定数据
+    # 3. Retrieve seat booking data for a classroom by classroom ID
     path('api/v1/classrooms/<int:classroom_id>/bookings', api_views.classroom_booking_list, name='classroom-bookings'),
-    # 4. 根据教室ID和用户email查询该教室全部评分和评论信息
+    # 4. Retrieve all ratings and review information for a classroom by classroom ID and user email
     path('api/v1/classrooms/<int:classroom_id>/reviews', api_views.classroom_review_list, name='classroom-reviews'),
-    # 预定座位接口
+    # Book a seat endpoint
     path('api/v1/bookings', api_views.book_seat, name='book-seat'),
-    # 取消座位接口
+    # Cancel a seat booking endpoint
     path('api/v1/bookings/cancel', api_views.cancel_booking, name='cancel-booking'),
-    # 创建学习空间接口
+    # Create a learning space endpoint
     path('api/v1/learning_spaces/create', api_views.create_learning_space, name='create-learning-space'),
-    # 修改学习空间细节接口
+    # Update learning space details endpoint
     path('api/v1/learning_spaces/<int:classroom_id>/update', api_views.update_learning_space, name='update-learning-space'),
 ]
-
-
-
