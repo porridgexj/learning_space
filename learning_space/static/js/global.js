@@ -37,7 +37,19 @@ function scoreToStars(score) {
   return starsHtml;
 }
 
-function addSpaceIcon(id, lat, lng) {
+function focusMarker(id) {
+  const marker = markers[id];
+  if (marker) {
+    map.flyTo(marker.getLatLng(), 17, {
+      animate: true,
+      duration: 0.4
+    });
+    marker.openPopup();
+  }
+}
+
+function addSpaceIcon(space, lat, lng) {
+  const { id, space_name } = space;
   const mapIconSpace = L.divIcon({
     className: 'map-icon map-icon-space',
     html: `
@@ -47,12 +59,24 @@ function addSpaceIcon(id, lat, lng) {
     `,
     iconAnchor: [15, 15],
   });
-  const marker = L.marker([lat, lng], { icon: mapIconSpace }).addTo(map);
-  marker.on('click', function () {
-    goTo(`/reserve/${id}`);
+  const marker = L.marker([lat, lng], { icon: mapIconSpace });
+  const popupContent = `
+    <div class="space-popup">
+      <div class="space-popup-name">${space_name}</div>
+      <button id="popup-btn-${id}" class="it-btn space-popup-button">Book Seat</button>
+    </div>
+  `;
+  marker.bindPopup(popupContent, { offset: L.point(0, -8) });
+  marker.on("popupopen", function () {
+    document.getElementById(`popup-btn-${id}`).addEventListener("click", function () {
+      goTo(`/reserve/${id}`);
+    });
   });
+  marker.addTo(map);
+  markers[id] = marker;
 }
 
+const markers = {};
 function getSpaceList(sortBy = 'distance') {
   let spaceList = [];
   const isSortByDistance = sortBy === 'distance';
@@ -73,10 +97,14 @@ function getSpaceList(sortBy = 'distance') {
       newEl.find('.space-name').text(space.space_name);
       newEl.find('.space-rating').html(scoreToStars(space.score));
       newEl.click(() => {
-        goTo(`/reserve/${space.id}`);
+        if (window.location.href.includes('/reserve')) {
+          goTo(`/reserve/${space.id}`);
+        } else {
+          focusMarker(space.id);
+        }
       });
       $('#space-container').append(newEl);
-      if (map) addSpaceIcon(space.id, space.latitude, space.longitude);
+      if (map) addSpaceIcon(space, space.latitude, space.longitude);
     }
     $('#space-container').scrollTop(0);
   }).catch((e) => {
@@ -168,6 +196,40 @@ function addFavour(userid, spaceid) {
     showMsg('Added to favourites', 'success');
   }).catch(() => {
     showMsg('Failed to add to favourites');
+  });
+}
+
+function closeDialog(el) {
+  anime({
+    targets: el[0],
+    opacity: [1, 0],
+    duration: 200,
+    easing: 'easeOutQuad',
+    complete: function () {
+      el.remove();
+    }
+  });
+}
+
+function showDialog(html, callback) {
+  const newEl = $('#dialog-template').clone();
+  newEl.removeAttr('id');
+  newEl.css({ opacity: 0 });
+  $('body').append(newEl);
+  newEl.find('.dialog-close').click(() => {
+    closeDialog(newEl);
+  });
+  newEl.find('.dialog-confirm-button').click(() => {
+    callback();
+    closeDialog(newEl);
+  });
+  newEl.find('.dialog-content').html(html);
+  newEl.show();
+  anime({
+    targets: newEl[0],
+    opacity: [0, 1],
+    duration: 200,
+    easing: 'easeOutQuad'
   });
 }
 

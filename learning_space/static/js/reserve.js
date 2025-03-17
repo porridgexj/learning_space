@@ -39,24 +39,46 @@ function getSeats(id) {
       }
       newEl.click(() => {
         if (seat.status === 0) {
-          reserveSeat(seat.index);
+          showDialog(`
+            <div class="confirm-reserve">
+              <div><span class="bold margin-r-4">Space:</span>${$('#space-name').text()}</div>
+              <div><span class="bold margin-r-4">Seat No:</span>${seat.index}</div>
+              <div>
+                <span class="bold margin-r-4">Duration:</span>
+                <select class="reserve-duration" duration-select-id="${id}">
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
+                <span>hours</span>
+              </div>
+              <div class="bold">Are you sure you want to reserve this seat?</div>
+            </div>
+          `, () => {
+            const duration = $(`[duration-select-id="${id}"]`).val();
+            reserveSeat(seat.index, duration);
+          });
         }
       });
+      newEl.append(`<span class="seat-option-index">${seat.index}</span>`);
       $('#seats-container').append(newEl);
     }
   });
 }
 
-function reserveSeat(seatId) {
+function reserveSeat(seatId, duration) {
   const params = {
     "user_email": getLocal('email'),
     "classroom_id": id,
     "seat_no": seatId,
     "start_time": dayjs().format('YYYY-MM-DD HH:mm:ss'),
-    "end_time": dayjs().add(4, 'hour').format('YYYY-MM-DD HH:mm:ss'),
+    "end_time": dayjs().add(duration, 'hour').format('YYYY-MM-DD HH:mm:ss'),
   }
   customAjax("POST", `/api/v1/bookings`, params).then(res => {
     getSeats(id);
+    showMsg('Reserve success', 'success');
   })
 }
 

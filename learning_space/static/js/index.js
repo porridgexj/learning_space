@@ -26,10 +26,10 @@ function drawMap() {
     iconAnchor: [15, 15],
   });
   L.marker([55.8732162258274, -4.291983246912423], { icon: mapIconUser }).addTo(map);
-  map.on('click', function (e) {
-    console.log(e.latlng.lat, e.latlng.lng, map.getZoom());
-    // L.marker([e.latlng.lat, e.latlng.lng], { icon: mapIconUser }).addTo(map);
-  });
+  // map.on('click', function (e) {
+  //   console.log(e.latlng.lat, e.latlng.lng, map.getZoom());
+  //   L.marker([e.latlng.lat, e.latlng.lng], { icon: mapIconUser }).addTo(map);
+  // });
 }
 
 function init() {
