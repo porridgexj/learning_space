@@ -7,7 +7,14 @@ from django.http import JsonResponse
 from django.utils.dateparse import parse_datetime
 from django.views.decorators.csrf import csrf_exempt
 
-from learning_space.user.models import LearningSpace, Booking, Comment, User, Seat
+from learning_space.user.models import (
+    LearningSpace,
+    Booking,
+    Comment,
+    User,
+    Seat,
+    FavouriteSpace,
+)
 
 
 def haversine(lon1, lat1, lon2, lat2):
@@ -94,7 +101,14 @@ def classroom_list(request):
 
 # 2. Retrieve detailed classroom information by classroom ID
 def classroom_detail(request, classroom_id):
+    user_id = request.GET.get("user_id")
     space = get_object_or_404(LearningSpace, pk=classroom_id)
+    is_favourite = 0
+    if user_id:
+        is_favourite = FavouriteSpace.objects.filter(
+            user_id=user_id, space_id=classroom_id
+        ).exists()
+        is_favourite = 1 if is_favourite else 0
     data = {
         "id": space.id,
         "space_name": space.space_name,
@@ -107,6 +121,7 @@ def classroom_detail(request, classroom_id):
         "status": space.get_status_display(),
         "create_time": space.create_time,
         "img_cover": space.img_cover,
+        "is_favourite": is_favourite,
     }
     return JsonResponse(data)
 

@@ -291,12 +291,16 @@ def add_favourite_space(request):
 def delete_favourite_space(request):
     data = json.loads(request.body)
     id = data.get("id")
-
-    if not id:
+    user_id = data.get("user_id")
+    space_id = data.get("space_id")
+    if not id and (not user_id or not space_id):
         return JsonResponse({"code": 400, "message": "missing fields"}, status=400)
 
     try:
-        favourite = FavouriteSpace.objects.get(id=id)
+        if id:
+            favourite = FavouriteSpace.objects.get(id=id)
+        else:
+            favourite = FavouriteSpace.objects.get(user_id=user_id, space_id=space_id)
         favourite.delete()
         return JsonResponse({"code": 200, "message": "deleted successfully"})
     except FavouriteSpace.DoesNotExist:

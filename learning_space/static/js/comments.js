@@ -16,15 +16,6 @@ function init() {
   getComments();
 }
 
-function getSpaceDetail(id) {
-  customAjax("GET", `/api/v1/classrooms/${id}`).then(res => {
-    const { space_name, score, description } = res;
-    $('#space-name').text(space_name);
-    $('#space-score').html(scoreToStars(score));
-    $('#space-desc-content').text(description);
-  });
-}
-
 function getComments() {
   customAjax("GET", `/api/comments`, { space_id: getUrlId() }).then(({ data }) => {
     const comments = data ?? [];
@@ -58,6 +49,7 @@ function submitRating() {
   customAjax("POST", `/api/comments/submit`, params).then(() => {
     $('#comment-textarea').val('');
     getComments();
+    showMsg('Comment successful', 'success');
   });
 }
 

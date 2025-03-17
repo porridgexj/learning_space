@@ -9,18 +9,6 @@ function init() {
     const selectedValue = $(this).val();
     getSpaceList(selectedValue);
   });
-  $('#favourite-btn').click(() => {
-    addFavour(getLocal('userid'), getUrlId());
-  });
-}
-
-function getSpaceDetail(id) {
-  customAjax("GET", `/api/v1/classrooms/${id}`).then(res => {
-    const { space_name, score, description, seat_num } = res;
-    $('#space-name').text(space_name);
-    $('#space-score').html(scoreToStars(score));
-    $('#space-desc-content').text(description);
-  });
 }
 
 function getSeats(id) {

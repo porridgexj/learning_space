@@ -183,8 +183,12 @@ select {
   background-color: rgb(174, 89, 89);
 }
 
-.favourite-button:hover {
-  background-color: rgb(174, 89, 89, 0.8);
+.favourite-button-hover:hover {
+  background-color: rgb(174, 89, 89, 0.8) !important;
+}
+
+.unfavourite-button-hover:hover {
+  background-color: rgb(51, 102, 0, 0.8) !important;
 }
 
 #space-name {

@@ -90,3 +90,7 @@
 .reserve-duration {
   width: 40px;
 }
+
+.space-container {
+  height: calc(100% - 120px);
+}

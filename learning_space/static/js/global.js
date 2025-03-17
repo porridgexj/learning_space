@@ -97,7 +97,7 @@ function getSpaceList(sortBy = 'distance') {
       newEl.find('.space-name').text(space.space_name);
       newEl.find('.space-rating').html(scoreToStars(space.score));
       newEl.click(() => {
-        if (window.location.href.includes('/reserve')) {
+        if (window.location.href.includes('/reserve') || window.location.href.includes('/comments')) {
           goTo(`/reserve/${space.id}`);
         } else {
           focusMarker(space.id);
@@ -194,8 +194,18 @@ function getSpaceInfo(id) {
 function addFavour(userid, spaceid) {
   customAjax('POST', '/api/add-favourite', { userid, spaceid }).then(() => {
     showMsg('Added to favourites', 'success');
+    getSpaceDetail(spaceid);
   }).catch(() => {
     showMsg('Failed to add to favourites');
+  });
+}
+
+function delFavour(userid, spaceid) {
+  customAjax('POST', '/api/del-favourite', { user_id: userid, space_id: spaceid }).then(() => {
+    showMsg('Unfavourite successful', 'success');
+    getSpaceDetail(spaceid);
+  }).catch(() => {
+    showMsg('Failed to remove favourite');
   });
 }
 
@@ -230,6 +240,34 @@ function showDialog(html, callback) {
     opacity: [0, 1],
     duration: 200,
     easing: 'easeOutQuad'
+  });
+}
+
+function getSpaceDetail(id) {
+  customAjax("GET", `/api/v1/classrooms/${id}`, { user_id: getLocal('userid') }).then(res => {
+    const { space_name, score, description, is_favourite } = res;
+    $('#space-name').text(space_name);
+    $('#space-score').html(scoreToStars(score));
+    $('#space-desc-content').text(description);
+    if (is_favourite === 0) {
+      $('#favourite-btn').css({ 'background-color': "rgb(174, 89, 89)" });
+      $('#favourite-btn').text('Favourite');
+      $('#favourite-btn').removeClass('unfavourite-button-hover');
+      $('#favourite-btn').addClass('favourite-button-hover');
+      $('#favourite-btn').off('click');
+      $('#favourite-btn').click(() => {
+        addFavour(getLocal('userid'), getUrlId());
+      });
+    } else {
+      $('#favourite-btn').css({ 'background-color': "rgb(51, 102, 0)" });
+      $('#favourite-btn').removeClass('favourite-button-hover');
+      $('#favourite-btn').addClass('unfavourite-button-hover');
+      $('#favourite-btn').text('Unfavourite');
+      $('#favourite-btn').off('click');
+      $('#favourite-btn').click(() => {
+        delFavour(getLocal('userid'), getUrlId());
+      });
+    }
   });
 }
 
