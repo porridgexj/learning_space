@@ -49,10 +49,13 @@ function submitRating() {
     showMsg('Please write a comment');
     return;
   }
+  showGlobalLoading();
   customAjax("POST", `/api/comments/submit`, params).then(() => {
     $('#comment-textarea').val('');
     getComments(getUrlId());
     showMsg('Comment successful', 'success');
+    getSpaceDetail(getUrlId());
+    hideGlobalLoading();
   });
 }
 

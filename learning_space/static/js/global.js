@@ -365,10 +365,10 @@ function is_reserve_page() {
 function refreshReserve(id) {
   if (is_reserve_page()) {
     getSeats(id);
-    history.replaceState(null, "", `/reserve/${id}`);
+    history.replaceState(null, "", `/reserve/${id}/`);
   } else {
     getComments(id);
-    history.replaceState(null, "", `/comments/${id}`);
+    history.replaceState(null, "", `/comments/${id}/`);
   }
   getSpaceDetail(id);
 }

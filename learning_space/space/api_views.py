@@ -78,8 +78,6 @@ def classroom_list(request):
         score = 0
         if comment_list:
             score = sum([b.score for b in comment_list]) / len(comment_list)
-        else:
-            score = float(space.score)
         results.append(
             {
                 "id": space.id,
@@ -87,7 +85,7 @@ def classroom_list(request):
                 "description": space.description,
                 "seat_num": space.seat_num,
                 "left_seat_num": space.left_seat_num,
-                "score": float(space.score) if score == 0 else score,
+                "score": score,
                 "status": space.get_status_display(),  # 'Open' or 'Closed'
                 "distance": distance,
                 "latitude": float(space.latitude),
@@ -117,8 +115,6 @@ def classroom_detail(request, classroom_id):
     score = 0
     if comment_list:
         score = sum([b.score for b in comment_list]) / len(comment_list)
-    else:
-        score = float(space.score)
     is_favourite = 0
     if user_id:
         is_favourite = FavouriteSpace.objects.filter(
@@ -131,7 +127,7 @@ def classroom_detail(request, classroom_id):
         "description": space.description,
         "seat_num": space.seat_num,
         "left_seat_num": space.left_seat_num,
-        "score": float(space.score) if score == 0 else score,
+        "score": score,
         "longitude": float(space.longitude) if space.longitude is not None else None,
         "latitude": float(space.latitude) if space.latitude is not None else None,
         "status": space.get_status_display(),
