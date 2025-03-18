@@ -27,12 +27,7 @@ function getSeats(id) {
             <div><span class="bold margin-r-4">Seat No:</span>${seat.index}</div>
             <div class="unavailable-time">
               <div class="unavailable-time-title">Unavailable Time Slots on <span class="selected-date">18/03/2025</span></div>
-              <div class="unavailable-time-list">
-                <div> 14:50 - 20:20 </div>
-                <div> 14:50 - 20:20 </div>
-                <div> 14:50 - 20:20 </div>
-                <div> 14:50 - 20:20 </div>
-              </div>
+              <div id="unavailable-time-list" class="unavailable-time-list"></div>
             </div>
             <div>
               <span class="bold margin-r-4">Start Time:</span>
@@ -65,9 +60,11 @@ function getSeats(id) {
           const endTimeSel = newEl.find('.reserve-end-time');
           startTimeSel.val(dayjs().format("YYYY-MM-DDTHH:mm"));
           endTimeSel.val(dayjs().add(2, 'hour').format("YYYY-MM-DDTHH:mm"));
+          getUnavailableTime(id, seat.index, dayjs().format("YYYY-MM-DD"));
           startTimeSel.on("change", function () {
             let newVal = $(this).val();
             newEl.find('.selected-date').text(dayjs(newVal).format('DD/MM/YYYY'));
+            getUnavailableTime(id, seat.index, dayjs(newVal).format("YYYY-MM-DD"));
           });
         });
       });
@@ -95,6 +92,25 @@ function reserveSeat(seatId, startTime, endTime) {
       reject();
     })
   });
+}
+
+function getUnavailableTime(spaceid, seatid, date) {
+  const query = {
+    classroom_id: spaceid,
+    seat_no: seatid,
+    date: date,
+  }
+  customAjax("GET", `/api/v1/classrooms/bookingslots`, query).then(({ booked_slots }) => {
+    timeListHtml = '';
+    if (booked_slots.length === 0) {
+      timeListHtml += `<div>No Data</div>`;
+    } else {
+      for (const time of booked_slots ?? []) {
+        timeListHtml += `<div>${time}</div>`;
+      }
+    }
+    $('#unavailable-time-list').html(timeListHtml);
+  })
 }
 
 init();
