@@ -1,6 +1,8 @@
 function init() {
   const id = getUrlId();
-  $('#view-reserve-btn').attr('href', `/reserve/${id}`);
+  $('#view-reserve-btn').click(() => {
+    goTo(`/reserve/${getUrlId()}`);
+  });
   for (let i = 5; i >= 1; i -= 0.5) {
     $("#rating-select").append(`<option value="${i}">${i}</option>`);
   }

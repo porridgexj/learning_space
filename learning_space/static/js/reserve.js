@@ -1,7 +1,9 @@
 const id = getUrlId();
 
 function init() {
-  $('#view-comments-btn').attr('href', `/comments/${id}`);
+  $('#view-comments-btn').click(() => {
+    goTo(`/comments/${getUrlId()}`);
+  })
   getSpaceDetail(id);
   getSpaceList();
   getSeats(id);

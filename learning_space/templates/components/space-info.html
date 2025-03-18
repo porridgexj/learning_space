@@ -5,16 +5,12 @@
     <span id="space-score"></span>
   </span>
   <span class="space-title-right">
+    <div id="favourite-btn" class="it-btn favourite-button">Favorite</div>
     {% if is_comments_page %}
-    <a id="view-reserve-btn">
-      <div class="it-btn">Reserve a seat</div>
-    </a>
+    <div class="it-btn" id="view-reserve-btn">Reserve a seat</div>
     {% endif %}
     {% if is_reserve_page %}
-    <div id="favourite-btn" class="it-btn favourite-button">Favorite</div>
-    <a id="view-comments-btn">
-      <div class="it-btn view-comments-btn">View Comments</div>
-    </a>
+    <div class="it-btn view-comments-btn" id="view-comments-btn">View Comments</div>
     {% endif %}
   </span>
 </div>
