@@ -287,7 +287,12 @@ function getSpaceDetail(id) {
     const { space_name, score, description, is_favourite, latitude, longitude, img_cover } = res;
     $('#space-name').text(space_name);
     $('#space-score').html(scoreToStars(score));
-    $('#space-desc-content').text(description);
+    $('#space-desc-content').html(`
+      <div class="space-desc-inner">
+        <div class="space-desc-inner-title">Description:</div>
+        <div class="space-desc-inner-text">${description}</div>
+      </div>
+    `);
     $('#info-cover-wrapper').html(`<img id="space-cover" src=/static/images/space${img_cover}.webp alt="cover"></img>`);
     if (is_reserve_page())
       initSpaceInfoMap(space_name, score, latitude, longitude);

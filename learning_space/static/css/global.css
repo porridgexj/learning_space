@@ -284,6 +284,23 @@ select {
   padding: 14px 20px;
 }
 
+.space-desc-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.space-desc-inner-title {
+  font-weight: bold;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.space-desc-inner-text {
+  width: 100%;
+}
+
 .global-message {
   position: fixed;
   padding: 20px 40px;

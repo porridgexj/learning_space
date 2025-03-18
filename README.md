@@ -15,5 +15,3 @@ pip install -r requirements.txt
 ```bash
 python manage.py runserver
 ```
-
-### api路由和实现放在api_urls和api_views下
