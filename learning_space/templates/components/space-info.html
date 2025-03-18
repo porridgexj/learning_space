@@ -20,14 +20,14 @@
 </div>
 <div class="space-info">
   <div class="info-cover">
-    <div class="info-cover-wrapper">
-      <img src="{% static 'images/space1.webp' %}" alt="cover">
-    </div>
+    <div id="info-cover-wrapper" class="info-cover-wrapper"></div>
   </div>
   <div class="space-desc">
     <div id="space-desc-content"></div>
   </div>
 </div>
+{% if is_reserve_page %}
 <div class="space-map">
   <div id="space-map-container" class="space-map-container"></div>
 </div>
+{% endif %}

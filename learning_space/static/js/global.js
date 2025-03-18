@@ -102,12 +102,12 @@ function getSpaceList(sortBy = 'distance') {
         newEl.find('.space-rating').html(scoreToStars(space.score));
         newEl.click(() => {
           if (window.location.href.includes('/reserve') || window.location.href.includes('/comments')) {
-            goTo(`/reserve/${space.id}`);
+            refreshReserve(space.id);
           } else {
             focusMarker(space.id);
           }
         });
-        newEl.find('.space-item-index').text(index);
+        newEl.find('.space-item-index').text(index + 1);
         newEl.find('.space-item-distance').text(`${space.distance.toFixed(1)} Miles`);
         $('#space-container').append(newEl);
         if (map) addSpaceIcon(space, space.latitude, space.longitude);
@@ -284,11 +284,13 @@ function initSpaceInfoMap(spaceName, score, lat, lng) {
 
 function getSpaceDetail(id) {
   customAjax("GET", `/api/v1/classrooms/${id}`, { user_id: getLocal('userid') }).then(res => {
-    const { space_name, score, description, is_favourite, latitude, longitude } = res;
+    const { space_name, score, description, is_favourite, latitude, longitude, img_cover } = res;
     $('#space-name').text(space_name);
     $('#space-score').html(scoreToStars(score));
     $('#space-desc-content').text(description);
-    initSpaceInfoMap(space_name, score, latitude, longitude);
+    $('#info-cover-wrapper').html(`<img id="space-cover" src=/static/images/space${img_cover}.webp alt="cover"></img>`);
+    if (is_reserve_page())
+      initSpaceInfoMap(space_name, score, latitude, longitude);
     if (is_favourite === 0) {
       $('#favourite-btn').css({ 'background-color': "rgb(174, 89, 89)" });
       $('#favourite-btn').text('Favourite');
@@ -335,6 +337,21 @@ function getPosition() {
       resolve();
     }
   });
+}
+
+function is_reserve_page() {
+  return window.location.pathname.startsWith('/reserve');
+}
+
+function refreshReserve(id) {
+  if (is_reserve_page()) {
+    getSeats(id);
+    history.replaceState(null, "", `/reserve/${id}`);
+  } else {
+    getComments(id);
+    history.replaceState(null, "", `/comments/${id}`);
+  }
+  getSpaceDetail(id);
 }
 
 let userPosition = null;

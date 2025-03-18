@@ -107,7 +107,34 @@ class IconClose extends HTMLElement {
   }
 }
 
+class IconUser extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.render();
+  }
+  render() {
+    this.shadowRoot.innerHTML = `
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      svg {
+        width: 100%;
+        color: var(--theme-color-1);
+      }
+    </style>
+    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path fill="currentColor" d="M512 512c123.776 0 224-100.224 224-224S635.776 64 512 64a223.936 223.936 0 0 0-224 224C288 411.776 388.224 512 512 512z m0 64c-149.504 0-448 85.76-448 256v128h896v-128c0-170.24-298.496-256-448-256z"></path>
+    </svg>
+    `;
+  }
+}
+
 customElements.define('icon-star', IconStar);
 customElements.define('icon-star-half', IconStarHalf);
 customElements.define('icon-star-empty', IconStarEmpty);
 customElements.define('icon-close', IconClose);
+customElements.define('icon-user', IconUser);

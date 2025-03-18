@@ -13,18 +13,23 @@ function init() {
   $('#submit-comment-button').click(() => {
     submitRating();
   });
-  getComments();
+  getComments(id);
 }
 
-function getComments() {
-  customAjax("GET", `/api/comments`, { space_id: getUrlId() }).then(({ data }) => {
+function getComments(id) {
+  customAjax("GET", `/api/comments`, { space_id: id }).then(({ data }) => {
     const comments = data ?? [];
     $('#user-comments-container').empty();
     for (const comment of comments) {
       console.log(comment);
       const newEl = $('#user-comment-template').clone();
       newEl.removeAttr('id');
-      newEl.find('.username').text(comment.nickname);
+      newEl.find('.username').html(`
+        <div class="comment-user-name">
+          <icon-user class="comment-icon-user"></icon-user>
+          <span>${comment.nickname}</span>
+        </div>
+      `);
       newEl.find('.rating').html(scoreToStars(comment.score));
       newEl.find('.comment').text(comment.comment);
       newEl.find('.created-time-text').text(dayjs(comment.created_time).format('YYYY-MM-DD HH:mm:ss'));
@@ -47,7 +52,7 @@ function submitRating() {
   }
   customAjax("POST", `/api/comments/submit`, params).then(() => {
     $('#comment-textarea').val('');
-    getComments();
+    getComments(getUrlId());
     showMsg('Comment successful', 'success');
   });
 }
