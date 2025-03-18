@@ -21,7 +21,6 @@ function getComments(id) {
     const comments = data ?? [];
     $('#user-comments-container').empty();
     for (const comment of comments) {
-      console.log(comment);
       const newEl = $('#user-comment-template').clone();
       newEl.removeAttr('id');
       newEl.find('.username').html(`

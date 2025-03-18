@@ -34,7 +34,7 @@ function getSeats(id) {
               <input type="datetime-local" class="it-datetime-input reserve-start-time">
             </div>
             <div>
-              <span class="bold margin-r-4">End Time:</span>
+              <span class="bold margin-r-4" style="margin-right: 12px">End Time:</span>
               <input type="datetime-local" class="it-datetime-input reserve-end-time">
             </div>
             <div class="bold">Confirm reservation for this seat?</div>
@@ -103,6 +103,8 @@ function getUnavailableTime(spaceid, seatid, date) {
     seat_no: seatid,
     date: date,
   }
+  showGlobalLoading();
+  $('#unavailable-time-list').empty();
   customAjax("GET", `/api/v1/classrooms/bookingslots`, query).then(({ booked_slots }) => {
     timeListHtml = '';
     if (booked_slots.length === 0) {
@@ -113,6 +115,9 @@ function getUnavailableTime(spaceid, seatid, date) {
       }
     }
     $('#unavailable-time-list').html(timeListHtml);
+    hideGlobalLoading();
+  }).catch(() => {
+    hideGlobalLoading();
   })
 }
 
