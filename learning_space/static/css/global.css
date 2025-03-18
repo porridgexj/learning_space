@@ -474,3 +474,16 @@ select {
   padding: 2px 6px;
   background-color: var(--input-bg-color);
 }
+
+.space-score-distance {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  font-size: 14px;
+  line-height: 14px;
+  justify-content: center;
+}
+
+.space-score-distance>*:not(:last-child) {
+  margin-right: 10px;
+}

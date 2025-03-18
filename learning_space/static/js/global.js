@@ -51,7 +51,7 @@ function focusMarker(id) {
 
 function addSpaceIcon(space, lat, lng) {
   const { id, space_name,
-    score
+    score, distance
   } = space;
   const mapIconSpace = L.divIcon({
     className: 'map-icon map-icon-space',
@@ -66,7 +66,10 @@ function addSpaceIcon(space, lat, lng) {
   const popupContent = `
     <div class="space-popup">
       <div class="space-popup-name">${space_name}</div>
-      <div class="display-flex align-items-center">${scoreToStars(score)}</div>
+      <div class="space-score-distance">
+        <span class="display-flex align-items-center">${scoreToStars(score)}</span>
+        <span class="display-flex align-items-center">${distance.toFixed(1)} Miles</span>
+      </div>
       <button id="popup-btn-${id}" class="it-btn space-popup-button">Book Seat</button>
     </div>
   `;
@@ -252,9 +255,10 @@ function showDialog(html, callback, onMounted) {
 }
 
 let spaceInfoMap = null;
-function initSpaceInfoMap(spaceName, score, lat, lng) {
+function initSpaceInfoMap(space) {
+  const { space_name, score, latitude, longitude } = space;
   if (spaceInfoMap) spaceInfoMap.remove();
-  spaceInfoMap = L.map('space-map-container').setView([lat, lng], 16);
+  spaceInfoMap = L.map('space-map-container').setView([latitude, longitude], 16);
   L.tileLayer(mapSource[mapType], {
     minZoom: 9,
     maxZoom: 18,
@@ -272,11 +276,13 @@ function initSpaceInfoMap(spaceName, score, lat, lng) {
     `,
     iconAnchor: [15, 15],
   });
-  const userMarker = L.marker([lat, lng], { icon: mapIconSpace }).addTo(spaceInfoMap);
+  const userMarker = L.marker([latitude, longitude], { icon: mapIconSpace }).addTo(spaceInfoMap);
   const popupContent = `
     <div class="space-popup">
-      <div class="space-popup-name">${spaceName}</div>
-      <div class="display-flex align-items-center">${scoreToStars(score)}</div>
+      <div class="space-popup-name">${space_name}</div>
+      <div class="space-score-distance">
+        <span class="display-flex align-items-center">${scoreToStars(score)}</span>
+      </div>
     </div>
   `;
   userMarker.bindPopup(popupContent, { offset: L.point(0, -8) });
@@ -295,7 +301,7 @@ function getSpaceDetail(id) {
     `);
     $('#info-cover-wrapper').html(`<img id="space-cover" src=/static/images/space${img_cover}.webp alt="cover"></img>`);
     if (is_reserve_page())
-      initSpaceInfoMap(space_name, score, latitude, longitude);
+      initSpaceInfoMap(res);
     if (is_favourite === 0) {
       $('#favourite-btn').css({ 'background-color': "rgb(174, 89, 89)" });
       $('#favourite-btn').text('Favourite');

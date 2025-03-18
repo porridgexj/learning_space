@@ -12,11 +12,13 @@ class IconStarHalf extends HTMLElement {
             align-items: center;
             justify-content: center;
             margin-right: 2px;
+            width: 13px;
+            height: 13px;
           }
           svg {
-            width: 13px;
+            width: 100%;
+            height: 100%;
             color: var(--theme-color-1);
-            zoom: 99%;
           }
         </style>
         <svg viewBox="0 0 1072 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -40,9 +42,12 @@ class IconStar extends HTMLElement {
           align-items: center;
           justify-content: center;
           margin-right: 2px;
+          width: 12px;
+          height: 12px;
         }
         svg {
-          width: 12px;
+          width: 100%;
+          height: 100%;
           color: var(--theme-color-1);
         }
     </style>
@@ -67,9 +72,12 @@ class IconStarEmpty extends HTMLElement {
           align-items: center;
           justify-content: center;
           margin-right: 2px;
+          width: 13px;
+          height: 13px;
         }
         svg {
-          width: 13px;
+          width: 100%;
+          height: 100%;
           color: var(--theme-color-1);
         }
     </style>
