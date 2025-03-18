@@ -144,3 +144,13 @@
   margin-right: 12px;
   margin-bottom: 12px;
 }
+
+.space-container {
+  height: calc(100% - 119px);
+}
+
+.space .space-item-distance {
+  top: unset;
+  transform: unset;
+  bottom: 18px
+}

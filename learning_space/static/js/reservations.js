@@ -10,19 +10,44 @@ function getReservations() {
       newEl.find('.end-time-value').text(`${dayjs(reserve.end_time).format('YYYY-MM-DD HH:mm:ss')}`);
       newEl.find('.details-btn-link').attr('href', `/reserve/${reserve.space__id}`);
       newEl.find('.cancel-btn').click(() => {
-        customAjax("POST", `/api/v1/bookings/cancel`, { 'booking_id': reserve.id }).then(() => {
-          getReservations();
+        showDialog(`
+          <div class="display-flex align-items-center justify-content-center" style="padding: 20px 0">
+            <div>Are you sure you want to cancel this reservation?</div>
+          </div>
+        `, () => {
+          customAjax("POST", `/api/v1/bookings/cancel`, { 'booking_id': reserve.id }).then(() => {
+            getReservations();
+            showMsg('Cancel Successful', 'success');
+          });
         });
       });
       $('#reserve-history').append(newEl);
+      const statusEl = newEl.find('.reservation-item-status');
+      if (dayjs().isBefore(dayjs(reserve.start_time))) {
+        statusEl.text('Not Started');
+        statusEl.css('background-color', 'yellow');
+      } else if (dayjs().isBefore(dayjs(reserve.end_time))) {
+        statusEl.text('In Progress');
+        statusEl.css('background-color', 'green');
+      } else {
+        statusEl.text('Expired');
+        statusEl.css('background-color', 'red');
+      }
       newEl.show();
     }
   });
 }
 
 function delFavour(id) {
-  customAjax("POST", '/api/del-favourite', { id }).then(() => {
-    getFavourites();
+  showDialog(`
+    <div class="display-flex align-items-center justify-content-center" style="padding: 20px 0">
+      <div>Are you sure you want to unfavorite this space?</div>
+    </div>
+  `, () => {
+    customAjax("POST", '/api/del-favourite', { id }).then(() => {
+      getFavourites();
+      showMsg('Unfavourite Successful', 'success');
+    });
   });
 }
 

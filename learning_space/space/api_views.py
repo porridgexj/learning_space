@@ -19,7 +19,7 @@ from learning_space.user.models import (
 
 def haversine(lon1, lat1, lon2, lat2):
     """
-    Calculate the great-circle distance between two points on Earth (in kilometers)
+    Calculate the great-circle distance between two points on Earth (in miles)
     """
     # Convert decimal degrees to radians
     lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2])
@@ -30,7 +30,7 @@ def haversine(lon1, lat1, lon2, lat2):
         + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
     )
     c = 2 * math.asin(math.sqrt(a))
-    r = 6371  # Earth's radius in kilometers
+    r = 3958.8  # Earth's radius in miles
     return c * r
 
 

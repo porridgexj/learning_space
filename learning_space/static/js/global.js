@@ -83,14 +83,14 @@ function getSpaceList(sortBy = 'distance') {
   const isSortByDistance = sortBy === 'distance';
   const params = {
     sort_by: sortBy,
-    longitude: isSortByDistance ? currentMapCenter.lng : undefined,
-    latitude: isSortByDistance ? currentMapCenter.lat : undefined,
+    longitude: currentMapCenter.lng,
+    latitude: currentMapCenter.lat,
   }
   customAjax('GET', '/api/v1/classrooms', params).then(res => {
     spaceList = res;
     globalSpaceList = spaceList;
     $('#space-container').empty();
-    for (let space of spaceList) {
+    for (let [index, space] of spaceList.entries()) {
       const newEl = $('#space-item-template').clone();
       newEl.show();
       newEl.removeAttr('id');
@@ -104,6 +104,8 @@ function getSpaceList(sortBy = 'distance') {
           focusMarker(space.id);
         }
       });
+      newEl.find('.space-item-index').text(index);
+      newEl.find('.space-item-distance').text(`${space.distance.toFixed(1)} Miles`);
       $('#space-container').append(newEl);
       if (map) addSpaceIcon(space, space.latitude, space.longitude);
     }

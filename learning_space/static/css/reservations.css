@@ -6,18 +6,18 @@
   display: flex;
   width: 100%;
   height: 100%;
-  padding: 60px 0;
+  padding: 40px 0;
 }
 
 .reserve-left {
   width: calc(100% - var(--reserve-right-width));
-  height: 100%;
+  height: calc(100% - 40px);
   border-right: 1px solid var(--border-color);
 }
 
 .reserve-right {
   width: var(--reserve-right-width);
-  height: 100%;
+  height: calc(100% - 40px);
 }
 
 .reserve-title {
@@ -48,16 +48,12 @@
   width: calc((100% - 20px * 3) / 2);
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
-  height: 200px;
   margin-left: 20px;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-}
-
-.reserve-item-template>* {
-  margin-bottom: 10px;
+  padding: 20px 20px 40px 20px;
+  position: relative;
 }
 
 .cancel-btn {
@@ -70,18 +66,11 @@
   color: rgb(52, 109, 52);
 }
 
-.reserve-buttons {
-  display: flex;
-}
-
-.reserve-buttons>* {
-  margin-right: 10px;
-}
-
 .space-name {
   font-weight: bold;
   font-size: 18px;
   line-height: 18px;
+  margin-bottom: 10px;
 }
 
 .seat-id {
@@ -100,16 +89,16 @@
   display: flex;
   align-items: center;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 #favourites-container {
-  padding: 10px;
+  padding: 0 20px;
   overflow-y: scroll;
 }
 
 .favourite-template {
   width: 100%;
-  height: 60px;
   display: flex;
   justify-content: center;
   border-radius: var(--border-radius);
@@ -118,7 +107,12 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  padding-left: 10px;
+  padding: 20px 0 20px 20px;
+}
+
+.favourite-template:hover {
+  background-color: rgba(81, 74, 56, 0.1);
+  cursor: pointer;
 }
 
 .favourite-template .space-name {
@@ -132,4 +126,28 @@
   cursor: pointer;
   color: rgb(255, 106, 106);
   width: 50px;
+}
+
+.reservation-item-status {
+  padding: 4px 6px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: bold;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  border-radius: 14px;
+}
+
+.reserve-buttons {
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
+}
+
+.reserve-buttons>* {
+  margin-right: 10px;
 }
