@@ -48,6 +48,7 @@ function getSeats(id) {
             if (dayjsStartTime.isAfter(dayjsEndTime) || dayjsStartTime.isSame(dayjsEndTime)) {
               showMsg('Start time cannot be later than or equal to the end time');
               reject();
+              return;
             }
             reserveSeat(seat.index, startTime, endTime, newEl).then(() => {
               resolve();
@@ -85,7 +86,6 @@ function reserveSeat(seatId, startTime, endTime, dialog) {
     }
     dialog.find('.btn-loading-mask').show();
     customAjax("POST", `/api/v1/bookings`, params).then(res => {
-      getSeats(id);
       showMsg('Reserve success', 'success');
       resolve();
     }).catch(res => {

@@ -92,6 +92,7 @@ function getSpaceList(sortBy = 'distance') {
       longitude: userPosition.lng,
       latitude: userPosition.lat,
     }
+    showGlobalLoading();
     customAjax('GET', '/api/v1/classrooms', params).then(res => {
       spaceList = res;
       globalSpaceList = spaceList;
@@ -116,8 +117,10 @@ function getSpaceList(sortBy = 'distance') {
         if (map) addSpaceIcon(space, space.latitude, space.longitude);
       }
       $('#space-container').scrollTop(0);
+      hideGlobalLoading();
     }).catch((e) => {
       console.log(e);
+      hideGlobalLoading();
     });
   });
 }
@@ -326,6 +329,7 @@ function getSpaceDetail(id) {
 
 function getPosition() {
   return new Promise((resolve, reject) => {
+    showGlobalLoading();
     if (!userPosition) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -333,18 +337,22 @@ function getPosition() {
             let latitude = position.coords.latitude;
             let longitude = position.coords.longitude;
             userPosition = { lat: latitude, lng: longitude };
+            hideGlobalLoading();
             resolve();
           },
           (error) => {
             userPosition = { lat: 55.86567951095817, lng: -4.2657280003186315 };
+            hideGlobalLoading();
             resolve();
           }
         );
       } else {
         userPosition = { lat: 55.86567951095817, lng: -4.2657280003186315 };
+        hideGlobalLoading();
         resolve();
       }
     } else {
+      hideGlobalLoading();
       resolve();
     }
   });
@@ -363,6 +371,32 @@ function refreshReserve(id) {
     history.replaceState(null, "", `/comments/${id}`);
   }
   getSpaceDetail(id);
+}
+
+
+let globalLoadingCounter = 0;
+let globalLoadingStartTime = Date.now();
+const leastInterval = 500;
+function showGlobalLoading() {
+  globalLoadingCounter += 1;
+  if (globalLoadingCounter === 1) {
+    $('#global-loading').show();
+    globalLoadingStartTime = Date.now();
+  }
+}
+
+function hideGlobalLoading() {
+  globalLoadingCounter -= 1;
+  if (globalLoadingCounter < 1) {
+    const timeInterval = Date.now() - globalLoadingStartTime;
+    if (timeInterval >= leastInterval) {
+      $('#global-loading').hide();
+    } else {
+      setTimeout(() => {
+        $('#global-loading').hide();
+      }, leastInterval - timeInterval);
+    }
+  }
 }
 
 let userPosition = null;

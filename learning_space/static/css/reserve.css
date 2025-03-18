@@ -113,6 +113,10 @@
   min-height: 80px;
 }
 
+.unavailable-time-title {
+  margin-bottom: 6px;
+}
+
 .unavailable-time-title .selected-date {
   font-size: 22px;
   line-height: 22px;
@@ -120,7 +124,7 @@
 }
 
 .unavailable-time-list {
-  max-height: 200px;
+  height: 120px;
   overflow-y: scroll;
   width: 100%;
   display: flex;
