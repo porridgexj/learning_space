@@ -110,6 +110,7 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 10px;
+  min-height: 80px;
 }
 
 .unavailable-time-title .selected-date {
