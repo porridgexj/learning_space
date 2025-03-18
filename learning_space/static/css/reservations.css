@@ -94,7 +94,11 @@
 
 #favourites-container {
   padding: 0 20px;
+}
+
+.favourites-container {
   overflow-y: scroll;
+  height: calc(100% - 69px);
 }
 
 .favourite-template {
