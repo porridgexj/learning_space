@@ -25,13 +25,13 @@ function getReservations() {
       const statusEl = newEl.find('.reservation-item-status');
       if (dayjs().isBefore(dayjs(reserve.start_time))) {
         statusEl.text('Not Started');
-        statusEl.css('background-color', 'yellow');
+        statusEl.css('background-color', '#cc9900');
       } else if (dayjs().isBefore(dayjs(reserve.end_time))) {
         statusEl.text('In Progress');
-        statusEl.css('background-color', 'green');
+        statusEl.css('background-color', '#336600');
       } else {
         statusEl.text('Expired');
-        statusEl.css('background-color', 'red');
+        statusEl.css('background-color', '#cc0000');
       }
       newEl.show();
     }

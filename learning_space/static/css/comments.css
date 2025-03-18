@@ -154,3 +154,11 @@
   transform: unset;
   bottom: 18px
 }
+
+.space {
+  padding-left: 28px;
+}
+
+.space .space-item-index {
+  left: 6px;
+}

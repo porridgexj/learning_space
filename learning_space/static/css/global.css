@@ -143,7 +143,8 @@ select {
   left: 8px;
   top: 50%;
   transform: translateY(-50%);
-  opacity: 0.4;
+  opacity: 0.6;
+  font-size: 14px;
 }
 
 .space .space-item-distance {
@@ -151,7 +152,7 @@ select {
   right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  opacity: 0.4;
+  opacity: 0.6;
   font-size: 14px;
   line-height: 14px;
 }
@@ -217,6 +218,7 @@ select {
   font-size: 24px;
   line-height: 24px;
   margin-right: 20px;
+  white-space: nowrap;
 }
 
 #space-score {
@@ -224,9 +226,24 @@ select {
   align-items: center;
 }
 
+.space-map {
+  width: 100%;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  padding: 20px 20px 0 20px;
+}
+
+.space-map-container {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+}
+
 .space-info {
   width: 100%;
-  height: 140px;
+  height: 130px;
   display: flex;
   align-items: center;
 }
@@ -346,7 +363,7 @@ select {
   height: 100vh;
   position: fixed;
   top: 0;
-  z-index: 99;
+  z-index: 9999;
   background-color: rgb(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
@@ -391,8 +408,11 @@ select {
   align-items: center;
   font-size: 14px;
   line-height: 14px;
-  margin-bottom: 8px;
   font-weight: bold;
+}
+
+.space-popup>*:not(:last-child) {
+  margin-bottom: 8px;
 }
 
 .bold {
@@ -428,4 +448,12 @@ select {
 
 .font-14 {
   font-size: 14px;
+}
+
+.it-datetime-input {
+  all: unset;
+  border-radius: 8px;
+  border: 1px solid var(--theme-color-1);
+  padding: 2px 6px;
+  background-color: var(--input-bg-color);
 }

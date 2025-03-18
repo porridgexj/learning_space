@@ -20,7 +20,7 @@
 
 .seats {
   width: 100%;
-  height: calc(100% - 260px);
+  height: calc(100% - 380px);
   padding: 20px;
 }
 
@@ -32,6 +32,7 @@
   align-items: center;
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
+  padding: 4px;
 }
 
 #seats-container {
@@ -80,7 +81,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding-left: 30px;
+  padding: 0 30px;
 }
 
 .confirm-reserve>* {
@@ -99,4 +100,37 @@
   top: unset;
   transform: unset;
   bottom: 18px
+}
+
+.unavailable-time {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.unavailable-time-title .selected-date {
+  font-size: 22px;
+  line-height: 22px;
+  font-weight: bold;
+}
+
+.unavailable-time-list {
+  max-height: 200px;
+  overflow-y: scroll;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.space {
+  padding-left: 28px;
+}
+
+.space .space-item-index {
+  left: 6px;
 }

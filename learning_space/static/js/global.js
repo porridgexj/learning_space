@@ -50,7 +50,9 @@ function focusMarker(id) {
 }
 
 function addSpaceIcon(space, lat, lng) {
-  const { id, space_name } = space;
+  const { id, space_name,
+    score
+  } = space;
   const mapIconSpace = L.divIcon({
     className: 'map-icon map-icon-space',
     html: `
@@ -64,6 +66,7 @@ function addSpaceIcon(space, lat, lng) {
   const popupContent = `
     <div class="space-popup">
       <div class="space-popup-name">${space_name}</div>
+      <div class="display-flex align-items-center">${scoreToStars(score)}</div>
       <button id="popup-btn-${id}" class="it-btn space-popup-button">Book Seat</button>
     </div>
   `;
@@ -80,38 +83,39 @@ function addSpaceIcon(space, lat, lng) {
 const markers = {};
 function getSpaceList(sortBy = 'distance') {
   let spaceList = [];
-  const isSortByDistance = sortBy === 'distance';
-  const params = {
-    sort_by: sortBy,
-    longitude: currentMapCenter.lng,
-    latitude: currentMapCenter.lat,
-  }
-  customAjax('GET', '/api/v1/classrooms', params).then(res => {
-    spaceList = res;
-    globalSpaceList = spaceList;
-    $('#space-container').empty();
-    for (let [index, space] of spaceList.entries()) {
-      const newEl = $('#space-item-template').clone();
-      newEl.show();
-      newEl.removeAttr('id');
-      newEl.attr('space-id', space.id);
-      newEl.find('.space-name').text(space.space_name);
-      newEl.find('.space-rating').html(scoreToStars(space.score));
-      newEl.click(() => {
-        if (window.location.href.includes('/reserve') || window.location.href.includes('/comments')) {
-          goTo(`/reserve/${space.id}`);
-        } else {
-          focusMarker(space.id);
-        }
-      });
-      newEl.find('.space-item-index').text(index);
-      newEl.find('.space-item-distance').text(`${space.distance.toFixed(1)} Miles`);
-      $('#space-container').append(newEl);
-      if (map) addSpaceIcon(space, space.latitude, space.longitude);
+  getPosition().then(() => {
+    const params = {
+      sort_by: sortBy,
+      longitude: userPosition.lng,
+      latitude: userPosition.lat,
     }
-    $('#space-container').scrollTop(0);
-  }).catch((e) => {
-    console.log(e);
+    customAjax('GET', '/api/v1/classrooms', params).then(res => {
+      spaceList = res;
+      globalSpaceList = spaceList;
+      $('#space-container').empty();
+      for (let [index, space] of spaceList.entries()) {
+        const newEl = $('#space-item-template').clone();
+        newEl.show();
+        newEl.removeAttr('id');
+        newEl.attr('space-id', space.id);
+        newEl.find('.space-name').text(space.space_name);
+        newEl.find('.space-rating').html(scoreToStars(space.score));
+        newEl.click(() => {
+          if (window.location.href.includes('/reserve') || window.location.href.includes('/comments')) {
+            goTo(`/reserve/${space.id}`);
+          } else {
+            focusMarker(space.id);
+          }
+        });
+        newEl.find('.space-item-index').text(index);
+        newEl.find('.space-item-distance').text(`${space.distance.toFixed(1)} Miles`);
+        $('#space-container').append(newEl);
+        if (map) addSpaceIcon(space, space.latitude, space.longitude);
+      }
+      $('#space-container').scrollTop(0);
+    }).catch((e) => {
+      console.log(e);
+    });
   });
 }
 
@@ -224,19 +228,20 @@ function closeDialog(el) {
   });
 }
 
-function showDialog(html, callback) {
+function showDialog(html, callback, onMounted) {
   const newEl = $('#dialog-template').clone();
   newEl.removeAttr('id');
   newEl.css({ opacity: 0 });
-  $('body').append(newEl);
   newEl.find('.dialog-close').click(() => {
     closeDialog(newEl);
   });
   newEl.find('.dialog-confirm-button').click(() => {
-    callback();
+    if (callback) callback(newEl);
     closeDialog(newEl);
   });
   newEl.find('.dialog-content').html(html);
+  if (onMounted) onMounted(newEl);
+  $('body').append(newEl);
   newEl.show();
   anime({
     targets: newEl[0],
@@ -246,12 +251,44 @@ function showDialog(html, callback) {
   });
 }
 
+let spaceInfoMap = null;
+function initSpaceInfoMap(spaceName, score, lat, lng) {
+  if (spaceInfoMap) spaceInfoMap.remove();
+  spaceInfoMap = L.map('space-map-container').setView([lat, lng], 16);
+  L.tileLayer(mapSource[mapType], {
+    minZoom: 9,
+    maxZoom: 18,
+  }).addTo(spaceInfoMap);
+  spaceInfoMap.setMaxBounds(L.latLngBounds(
+    L.latLng(56.386542701886306, -4.890747126191855),
+    L.latLng(55.32758195350942, -3.355407770723105)
+  ));
+  const mapIconSpace = L.divIcon({
+    className: 'map-icon map-icon-space',
+    html: `
+      <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <path fill="currentColor" d="M973.142857 273.142857q22.857143 32.571429 10.285714 73.714286l-157.142857 517.714286q-10.857143 36.571429-43.714285 61.428571T712.571429 950.857143H185.142857q-44 0-84.857143-30.571429T43.428571 845.142857q-13.714286-38.285714-1.142857-72.571428 0-2.285714 1.714286-15.428572t2.285714-21.142857q0.571429-4.571429-1.714285-12.285714t-1.714286-11.142857q1.142857-6.285714 4.571428-12t9.428572-13.428572T66.285714 673.714286q13.142857-21.714286 25.714286-52.285715t17.142857-52.285714q1.714286-5.714286 0.285714-17.142857t-0.285714-16q1.714286-6.285714 9.714286-16t9.714286-13.142857q12-20.571429 24-52.571429t14.285714-51.428571q0.571429-5.142857-1.428572-18.285714t0.285715-16q2.285714-7.428571 12.571428-17.428572t12.571429-12.857143q10.857143-14.857143 24.285714-48.285714T230.857143 234.857143q0.571429-4.571429-1.714286-14.571429t-1.142857-15.142857q1.142857-4.571429 5.142857-10.285714t10.285714-13.142857 9.714286-12q4.571429-6.857143 9.428572-17.428572t8.571428-20 9.142857-20.571428 11.142857-18.285715 15.142858-13.428571 20.571428-6.571429T354.285714 76.571429l-0.571428 1.714285q21.714286-5.142857 29.142857-5.142857h434.857143q42.285714 0 65.142857 32t10.285714 74.285714l-156.571428 517.714286q-20.571429 68-40.857143 87.714286T622.285714 804.571429H125.714286q-15.428571 0-21.714286 8.571428-6.285714 9.142857-0.571429 24.571429 13.714286 40 82.285715 40h527.428571q16.571429 0 32-8.857143t20-23.714286l171.428572-564q4-12.571429 2.857142-32.571428 21.714286 8.571429 33.714286 24.571428z m-608 1.142857q-2.285714 7.428571 1.142857 12.857143t11.428572 5.428572h347.428571q7.428571 0 14.571429-5.428572T749.142857 274.285714l12-36.571428q2.285714-7.428571-1.142857-12.857143t-11.428571-5.428572H401.142857q-7.428571 0-14.571428 5.428572T377.142857 237.714286z m-47.428571 146.285715q-2.285714 7.428571 1.142857 12.857142t11.428571 5.428572h347.428572q7.428571 0 14.571428-5.428572T701.714286 420.571429l12-36.571429q2.285714-7.428571-1.142857-12.857143t-11.428572-5.428571H353.714286q-7.428571 0-14.571429 5.428571T329.714286 384z"></path>
+      </svg>
+    `,
+    iconAnchor: [15, 15],
+  });
+  const userMarker = L.marker([lat, lng], { icon: mapIconSpace }).addTo(spaceInfoMap);
+  const popupContent = `
+    <div class="space-popup">
+      <div class="space-popup-name">${spaceName}</div>
+      <div class="display-flex align-items-center">${scoreToStars(score)}</div>
+    </div>
+  `;
+  userMarker.bindPopup(popupContent, { offset: L.point(0, -8) });
+}
+
 function getSpaceDetail(id) {
   customAjax("GET", `/api/v1/classrooms/${id}`, { user_id: getLocal('userid') }).then(res => {
-    const { space_name, score, description, is_favourite } = res;
+    const { space_name, score, description, is_favourite, latitude, longitude } = res;
     $('#space-name').text(space_name);
     $('#space-score').html(scoreToStars(score));
     $('#space-desc-content').text(description);
+    initSpaceInfoMap(space_name, score, latitude, longitude);
     if (is_favourite === 0) {
       $('#favourite-btn').css({ 'background-color': "rgb(174, 89, 89)" });
       $('#favourite-btn').text('Favourite');
@@ -274,11 +311,42 @@ function getSpaceDetail(id) {
   });
 }
 
-let currentMapCenter = { lat: 55.86567951095817, lng: -4.2657280003186315 };
+function getPosition() {
+  return new Promise((resolve, reject) => {
+    if (!userPosition) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            let latitude = position.coords.latitude;
+            let longitude = position.coords.longitude;
+            userPosition = { lat: latitude, lng: longitude };
+            resolve();
+          },
+          (error) => {
+            userPosition = { lat: 55.86567951095817, lng: -4.2657280003186315 };
+            resolve();
+          }
+        );
+      } else {
+        userPosition = { lat: 55.86567951095817, lng: -4.2657280003186315 };
+        resolve();
+      }
+    } else {
+      resolve();
+    }
+  });
+}
+
+let userPosition = null;
 let msgId = 1;
 let msgZIndex = 1000;
 let globalSpaceList = [];
 let map = null;
+let mapType = window.localStorage.getItem('mapType') ?? 'normal';
+let mapSource = {
+  'normal': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  'satellite': 'https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.png?api_key=c133c1b3-dc26-4883-b995-4358b31c43d4',
+};
 
 $('#log-out-button').click(() => {
   logout();
