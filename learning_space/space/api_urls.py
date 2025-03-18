@@ -11,6 +11,8 @@ urlpatterns = [
     path('api/v1/classrooms/<int:classroom_id>/bookings', api_views.classroom_booking_list, name='classroom-bookings'),
     # 4. Retrieve all ratings and review information for a classroom by classroom ID and user email
     path('api/v1/classrooms/<int:classroom_id>/reviews', api_views.classroom_review_list, name='classroom-reviews'),
+    # Book slot
+    path('api/v1/classrooms/bookingslots', api_views.get_booked_slots, name='book-slot'),
     # Book a seat endpoint
     path('api/v1/bookings', api_views.book_seat, name='book-seat'),
     # Cancel a seat booking endpoint

@@ -1,6 +1,8 @@
 import json
 import math
 from datetime import timedelta
+
+from django.template.defaulttags import comment
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -71,6 +73,13 @@ def classroom_list(request):
             distance = haversine(
                 user_lon, user_lat, float(space.longitude), float(space.latitude)
             )
+        comment_list = Comment.objects.filter(space_id=space.id)
+        # mean score
+        score = 0
+        if comment_list:
+            score = sum([b.score for b in comment_list]) / len(comment_list)
+        else:
+            score = float(space.score)
         results.append(
             {
                 "id": space.id,
@@ -78,7 +87,7 @@ def classroom_list(request):
                 "description": space.description,
                 "seat_num": space.seat_num,
                 "left_seat_num": space.left_seat_num,
-                "score": float(space.score),
+                "score": float(space.score) if score==0 else score,
                 "status": space.get_status_display(),  # 'Open' or 'Closed'
                 "distance": distance,
                 "latitude": float(space.latitude),
@@ -103,6 +112,13 @@ def classroom_list(request):
 def classroom_detail(request, classroom_id):
     user_id = request.GET.get("user_id")
     space = get_object_or_404(LearningSpace, pk=classroom_id)
+    comment_list = Comment.objects.filter(space_id=classroom_id)
+    # mean score
+    score = 0
+    if comment_list:
+        score = sum([b.score for b in comment_list]) / len(comment_list)
+    else:
+        score = float(space.score)
     is_favourite = 0
     if user_id:
         is_favourite = FavouriteSpace.objects.filter(
@@ -115,7 +131,7 @@ def classroom_detail(request, classroom_id):
         "description": space.description,
         "seat_num": space.seat_num,
         "left_seat_num": space.left_seat_num,
-        "score": float(space.score),
+        "score": float(space.score) if score==0 else score,
         "longitude": float(space.longitude) if space.longitude is not None else None,
         "latitude": float(space.latitude) if space.latitude is not None else None,
         "status": space.get_status_display(),
@@ -211,6 +227,43 @@ def classroom_review_list(request, classroom_id):
 
 
 @csrf_exempt
+def get_booked_slots(request):
+    if request.method != 'GET':
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
+    space_id = request.GET.get('classroom_id')
+    seat_no = request.GET.get('seat_no')
+    date_str = request.GET.get('date')
+
+    if not (space_id and seat_no and date_str):
+        return JsonResponse({"error": "Missing parameters: space_id, seat_no, and date are required."}, status=400)
+
+    # 解析日期，格式要求为 YYYY-MM-DD
+    try:
+        date_obj = timezone.datetime.strptime(date_str, '%Y-%m-%d').date()
+    except ValueError:
+        return JsonResponse({"error": "Invalid date format. Use YYYY-MM-DD."}, status=400)
+
+    # 构造当天的起始和结束时间（使用 timezone.make_aware 保证时区正确）
+    start_of_day = timezone.make_aware(timezone.datetime.combine(date_obj, timezone.datetime.min.time()))
+    end_of_day = timezone.make_aware(timezone.datetime.combine(date_obj, timezone.datetime.max.time()))
+
+    bookings = Booking.objects.filter(
+        space_id=space_id,
+        seat_no=seat_no,
+        start_time__gte=start_of_day,
+        end_time__lte=end_of_day
+    ).order_by('start_time')
+
+    booked_slots = []
+    for b in bookings:
+        start_str = b.start_time.strftime('%H:%M')
+        end_str = b.end_time.strftime('%H:%M')
+        booked_slots.append(f"{start_str} - {end_str}")
+
+    return JsonResponse({"booked_slots": booked_slots})
+
+@csrf_exempt
 def book_seat(request):
     if request.method != "POST":
         return JsonResponse({"error": "Method not allowed"}, status=405)
@@ -240,31 +293,29 @@ def book_seat(request):
     if start_time is None or end_time is None:
         return JsonResponse({"error": "Invalid start_time or end_time"}, status=400)
 
-    now = timezone.now()
-    # Check if the seat is already booked within the next 6 hours from now
-    active_existing = Booking.objects.filter(
-        space_id=data["classroom_id"],
-        seat_no=data["seat_no"],
-        start_time__lt=now + timedelta(hours=6),
-        end_time__gt=now,
+    # check conflicting bookings
+    conflicting_bookings = Booking.objects.filter(
+        space_id=data['classroom_id'],
+        seat_no=data['seat_no'],
+        start_time__lt=end_time,
+        end_time__gt=start_time
     )
-    if active_existing.exists():
-        return JsonResponse(
-            {"error": "Seat already booked within the next six hours"}, status=400
-        )
+    if conflicting_bookings.exists():
+        return JsonResponse({"error": "The requested time slot overlaps with an existing booking."}, status=400)
 
     # If no conflicts, create booking record
     booking = Booking.objects.create(
         user=user,
-        space_id=data["classroom_id"],
-        seat_no=data["seat_no"],
+        space_id=data['classroom_id'],
+        seat_no=data['seat_no'],
         start_time=start_time,
-        end_time=end_time,
+        end_time=end_time
     )
 
-    return JsonResponse(
-        {"message": "Booking created successfully", "booking_id": booking.id}
-    )
+    return JsonResponse({
+        "message": "Booking created successfully",
+        "booking_id": booking.id
+    })
 
 
 @csrf_exempt
