@@ -19,16 +19,15 @@ function init() {
 function getComments() {
   customAjax("GET", `/api/comments`, { space_id: getUrlId() }).then(({ data }) => {
     const comments = data ?? [];
-    console.log(comments);
     $('#user-comments-container').empty();
     for (const comment of comments) {
       console.log(comment);
       const newEl = $('#user-comment-template').clone();
       newEl.removeAttr('id');
       newEl.find('.username').text(comment.nickname);
-      newEl.find('.rating').text(comment.score);
+      newEl.find('.rating').html(scoreToStars(comment.score));
       newEl.find('.comment').text(comment.comment);
-      newEl.find('.created-time').text(dayjs(comment.created_time).format('YYYY-MM-DD HH:mm:ss'));
+      newEl.find('.created-time-text').text(dayjs(comment.created_time).format('YYYY-MM-DD HH:mm:ss'));
       $('#user-comments-container').append(newEl);
       newEl.show();
     }

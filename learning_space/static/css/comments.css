@@ -112,3 +112,35 @@
   font-size: 18px;
   line-height: 18px;
 }
+
+.user-comment-template .rating {
+  display: flex;
+  align-items: center;
+}
+
+.user-comment-template {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.user-comment-template .created-time {
+  font-size: 14px;
+  line-height: 14px;
+  color: #818181;
+}
+
+.user-comment-template .created-time>* {
+  margin-right: 4px;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+}
+
+.comment-header>* {
+  margin-right: 12px;
+  margin-bottom: 12px;
+}

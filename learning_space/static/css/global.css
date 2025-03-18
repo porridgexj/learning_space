@@ -383,3 +383,13 @@ select {
 .margin-r-4 {
   margin-right: 4px;
 }
+
+.space-list-rating {
+  font-size: 14px;
+  line-height: 14px;
+  margin-left: 2px;
+}
+
+.column {
+  flex-direction: column;
+}

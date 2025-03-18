@@ -23,7 +23,7 @@ function customAjax(type, url, data, headers = {}) {
 function scoreToStars(score) {
   let starsHtml = "";
   let starsNum = 0;
-  for (let i = 1; i < score; i++) {
+  for (let i = 1; i <= score; i++) {
     starsHtml += '<icon-star></icon-star>';
     starsNum++;
   }
@@ -34,6 +34,7 @@ function scoreToStars(score) {
   for (let i = starsNum; i < 5; i++) {
     starsHtml += '<icon-star-empty></icon-star-empty>';
   }
+  starsHtml += `<span class="space-list-rating">${(Math.floor(Number(score) * 10) / 10).toFixed(1)}</span>`;
   return starsHtml;
 }
 
