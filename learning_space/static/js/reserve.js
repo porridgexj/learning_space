@@ -49,7 +49,7 @@ function getSeats(id) {
               showMsg('Start time cannot be later than or equal to the end time');
               reject();
             }
-            reserveSeat(seat.index, startTime, endTime).then(() => {
+            reserveSeat(seat.index, startTime, endTime, newEl).then(() => {
               resolve();
             }).catch(() => {
               reject();
@@ -74,7 +74,7 @@ function getSeats(id) {
   });
 }
 
-function reserveSeat(seatId, startTime, endTime) {
+function reserveSeat(seatId, startTime, endTime, dialog) {
   return new Promise((resolve, reject) => {
     const params = {
       "user_email": getLocal('email'),
@@ -83,6 +83,7 @@ function reserveSeat(seatId, startTime, endTime) {
       "start_time": dayjs(startTime).format('YYYY-MM-DD HH:mm:ss'),
       "end_time": dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'),
     }
+    dialog.find('.btn-loading-mask').show();
     customAjax("POST", `/api/v1/bookings`, params).then(res => {
       getSeats(id);
       showMsg('Reserve success', 'success');
@@ -90,7 +91,9 @@ function reserveSeat(seatId, startTime, endTime) {
     }).catch(res => {
       showMsg(res.message);
       reject();
-    })
+    }).finally(() => {
+      dialog.find('.btn-loading-mask').hide();
+    });
   });
 }
 

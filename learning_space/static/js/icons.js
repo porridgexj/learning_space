@@ -141,8 +141,34 @@ class IconUser extends HTMLElement {
   }
 }
 
+class IconLoading extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.render();
+  }
+  render() {
+    this.shadowRoot.innerHTML = `
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      svg {
+        width: 100%;
+      }
+    </style>
+    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path fill="currentColor" d="M512 96a416 416 0 0 0 0 832v-104A312 312 0 1 1 824 512H928A416 416 0 0 0 512 96z"></path>
+    </svg>
+    `;
+  }
+}
+
 customElements.define('icon-star', IconStar);
 customElements.define('icon-star-half', IconStarHalf);
 customElements.define('icon-star-empty', IconStarEmpty);
 customElements.define('icon-close', IconClose);
 customElements.define('icon-user', IconUser);
+customElements.define('icon-loading', IconLoading);
