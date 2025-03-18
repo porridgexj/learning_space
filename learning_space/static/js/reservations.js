@@ -15,9 +15,12 @@ function getReservations() {
             <div>Are you sure you want to cancel this reservation?</div>
           </div>
         `, () => {
-          customAjax("POST", `/api/v1/bookings/cancel`, { 'booking_id': reserve.id }).then(() => {
-            getReservations();
-            showMsg('Cancel Successful', 'success');
+          return new Promise((resolve) => {
+            customAjax("POST", `/api/v1/bookings/cancel`, { 'booking_id': reserve.id }).then(() => {
+              getReservations();
+              showMsg('Cancel Successful', 'success');
+            });
+            resolve();
           });
         });
       });
@@ -44,9 +47,12 @@ function delFavour(id) {
       <div>Are you sure you want to unfavorite this space?</div>
     </div>
   `, () => {
-    customAjax("POST", '/api/del-favourite', { id }).then(() => {
-      getFavourites();
-      showMsg('Unfavourite Successful', 'success');
+    return new Promise((resolve) => {
+      customAjax("POST", '/api/del-favourite', { id }).then(() => {
+        getFavourites();
+        showMsg('Unfavourite Successful', 'success');
+      });
+      resolve();
     });
   });
 }

@@ -35,29 +35,36 @@ function getSeats(id) {
               </div>
             </div>
             <div>
-              <span class="bold margin-r-4">Start time:</span>
+              <span class="bold margin-r-4">Start Time:</span>
               <input type="datetime-local" class="it-datetime-input reserve-start-time">
             </div>
             <div>
-              <span class="bold margin-r-4">Duration:</span>
-              <select class="reserve-duration" duration-select-id="${id}">
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-              </select>
-              <span>hours</span>
+              <span class="bold margin-r-4">End Time:</span>
+              <input type="datetime-local" class="it-datetime-input reserve-end-time">
             </div>
             <div class="bold">Confirm reservation for this seat?</div>
           </div>
         `, (newEl) => {
-          const duration = $(`[duration-select-id="${id}"]`).val();
-          const startTime = newEl.find('.reserve-start-time').val();
-          reserveSeat(seat.index, duration, startTime);
+          return new Promise((resolve, reject) => {
+            const startTime = newEl.find('.reserve-start-time').val();
+            const endTime = newEl.find('.reserve-end-time').val();
+            const dayjsStartTime = dayjs(startTime);
+            const dayjsEndTime = dayjs(endTime);
+            if (dayjsStartTime.isAfter(dayjsEndTime) || dayjsStartTime.isSame(dayjsEndTime)) {
+              showMsg('Start time cannot be later than or equal to the end time');
+              reject();
+            }
+            reserveSeat(seat.index, startTime, endTime).then(() => {
+              resolve();
+            }).catch(() => {
+              reject();
+            });
+          });
         }, (newEl) => {
           const startTimeSel = newEl.find('.reserve-start-time');
+          const endTimeSel = newEl.find('.reserve-end-time');
           startTimeSel.val(dayjs().format("YYYY-MM-DDTHH:mm"));
+          endTimeSel.val(dayjs().add(2, 'hour').format("YYYY-MM-DDTHH:mm"));
           startTimeSel.on("change", function () {
             let newVal = $(this).val();
             newEl.find('.selected-date').text(dayjs(newVal).format('DD/MM/YYYY'));
@@ -70,19 +77,24 @@ function getSeats(id) {
   });
 }
 
-function reserveSeat(seatId, duration, startTime) {
-  console.log(startTime);
-  const params = {
-    "user_email": getLocal('email'),
-    "classroom_id": id,
-    "seat_no": seatId,
-    "start_time": dayjs(startTime).format('YYYY-MM-DD HH:mm:ss'),
-    "end_time": dayjs().add(duration, 'hour').format('YYYY-MM-DD HH:mm:ss'),
-  }
-  customAjax("POST", `/api/v1/bookings`, params).then(res => {
-    getSeats(id);
-    showMsg('Reserve success', 'success');
-  })
+function reserveSeat(seatId, startTime, endTime) {
+  return new Promise((resolve, reject) => {
+    const params = {
+      "user_email": getLocal('email'),
+      "classroom_id": id,
+      "seat_no": seatId,
+      "start_time": dayjs(startTime).format('YYYY-MM-DD HH:mm:ss'),
+      "end_time": dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'),
+    }
+    customAjax("POST", `/api/v1/bookings`, params).then(res => {
+      getSeats(id);
+      showMsg('Reserve success', 'success');
+      resolve();
+    }).catch(res => {
+      showMsg(res.message);
+      reject();
+    })
+  });
 }
 
 init();

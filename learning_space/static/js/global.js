@@ -154,7 +154,7 @@ function showMsg(text = '', type = 'error') {
   }
   let newMsg = $("#global-message").clone();
   newMsg.attr("msg-id", newMsgId);
-  newMsg.find("#global-message-text").text(text);
+  newMsg.find("#global-message-text").html(text);
   newMsg.removeAttr('id');
   let initTop = '-76px';
   let targetTop = '20px';
@@ -165,7 +165,6 @@ function showMsg(text = '', type = 'error') {
   });
   $("body").append(newMsg);
   newMsg.show();
-  console.log(anime());
   anime({
     targets: `[msg-id="${newMsgId}"]`,
     top: [initTop, targetTop],
@@ -239,8 +238,9 @@ function showDialog(html, callback, onMounted) {
     closeDialog(newEl);
   });
   newEl.find('.dialog-confirm-button').click(() => {
-    if (callback) callback(newEl);
-    closeDialog(newEl);
+    callback(newEl).then(() => {
+      closeDialog(newEl);
+    })
   });
   newEl.find('.dialog-content').html(html);
   if (onMounted) onMounted(newEl);
@@ -367,7 +367,7 @@ function refreshReserve(id) {
 
 let userPosition = null;
 let msgId = 1;
-let msgZIndex = 1000;
+let msgZIndex = 10000;
 let globalSpaceList = [];
 let map = null;
 let mapType = window.localStorage.getItem('mapType') ?? 'normal';
