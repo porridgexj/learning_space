@@ -14,7 +14,6 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def register(request):
     try:
@@ -70,7 +69,6 @@ def register(request):
         return JsonResponse({"code": 500, "message": "error"}, status=500)
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def login(request):
     print(request.body)
@@ -111,7 +109,6 @@ def login(request):
         return JsonResponse({"code": 500, "message": "error"}, status=500)
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def logout(request):
     response = JsonResponse({"code": 200, "message": "ok"})
@@ -119,7 +116,6 @@ def logout(request):
     return response
 
 
-@csrf_exempt
 @require_http_methods(["GET"])
 def get_favourite_spaces(request):
     userid = request.GET.get("id", "").strip()
@@ -168,7 +164,6 @@ def get_booking_history(request):
     return JsonResponse({"code": 200, "message": "ok", "data": list(bookings)})
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def submit_comment(request):
     """提交评论接口"""
@@ -270,7 +265,6 @@ def get_comments(request):
     )
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def add_favourite_space(request):
     data = json.loads(request.body)
@@ -286,7 +280,6 @@ def add_favourite_space(request):
     return JsonResponse({"code": 200, "message": "ok"})
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def delete_favourite_space(request):
     data = json.loads(request.body)

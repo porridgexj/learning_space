@@ -1,11 +1,13 @@
 function customAjax(type, url, data, headers = {}) {
   const baseUrl = window.location.origin;
+  const csrfToken = $("meta[name='csrf-token']").attr("content");
   return new Promise((resolve, reject) => {
     $.ajax({
       type: type,
       url: baseUrl + url,
       data: type === "GET" ? data : JSON.stringify(data),
       beforeSend: function (xhr) {
+        xhr.setRequestHeader("X-CSRFToken", csrfToken);
         for (let key in headers) {
           xhr.setRequestHeader(key, headers[key]);
         }

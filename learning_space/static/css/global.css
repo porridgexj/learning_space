@@ -549,3 +549,7 @@ select {
   color: var(--theme-color-2);
   animation: spin 1s linear infinite;
 }
+
+#view-reserve-btn {
+  min-width: 115px;
+}

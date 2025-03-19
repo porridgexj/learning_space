@@ -222,7 +222,6 @@ def classroom_review_list(request, classroom_id):
     return JsonResponse(data)
 
 
-@csrf_exempt
 def get_booked_slots(request):
     if request.method != "GET":
         return JsonResponse({"error": "Method not allowed"}, status=405)
@@ -269,7 +268,6 @@ def get_booked_slots(request):
     return JsonResponse({"booked_slots": booked_slots})
 
 
-@csrf_exempt
 def book_seat(request):
     if request.method != "POST":
         return JsonResponse({"error": "Method not allowed"}, status=405)
@@ -327,7 +325,6 @@ def book_seat(request):
     )
 
 
-@csrf_exempt
 def cancel_booking(request):
     if request.method != "POST":
         return JsonResponse({"error": "Method not allowed"}, status=405)
@@ -349,7 +346,6 @@ def cancel_booking(request):
     return JsonResponse({"message": "Booking cancelled successfully"})
 
 
-@csrf_exempt
 def create_learning_space(request):
     if request.method != "POST":
         return JsonResponse({"error": "Method not allowed"}, status=405)
@@ -388,7 +384,6 @@ def create_learning_space(request):
     )
 
 
-@csrf_exempt
 def update_learning_space(request, classroom_id):
     if request.method not in ["POST", "PUT"]:
         return JsonResponse({"error": "Method not allowed"}, status=405)
