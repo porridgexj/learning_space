@@ -47,6 +47,11 @@ function getSeats(id) {
             const endTime = newEl.find('.reserve-end-time').val();
             const dayjsStartTime = dayjs(startTime);
             const dayjsEndTime = dayjs(endTime);
+            if (!dayjsStartTime.isSame(dayjsEndTime, 'day')) {
+              showMsg('Start time and end time must be on the same day');
+              reject();
+              return;
+            }
             if (dayjsStartTime.isAfter(dayjsEndTime) || dayjsStartTime.isSame(dayjsEndTime)) {
               showMsg('Start time cannot be later than or equal to the end time');
               reject();
