@@ -29,6 +29,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://learningspace.pro",
+    "https://www.learningspace.pro",
+    "https://18.133.234.199",
+]
 
 # Application definition
 

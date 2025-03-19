@@ -28,7 +28,7 @@ function getSeats(id) {
             <div><span class="bold margin-r-4">Space:</span>${$('#space-name').text()}</div>
             <div><span class="bold margin-r-4">Seat No:</span>${seat.index}</div>
             <div class="unavailable-time">
-              <div class="unavailable-time-title">Unavailable Time Slots on <span class="selected-date">18/03/2025</span></div>
+              <div class="unavailable-time-title">Unavailable Time Slots on <span class="selected-date"></span></div>
               <div id="unavailable-time-list" class="unavailable-time-list"></div>
             </div>
             <div>
@@ -61,6 +61,7 @@ function getSeats(id) {
         }, (newEl) => {
           const startTimeSel = newEl.find('.reserve-start-time');
           const endTimeSel = newEl.find('.reserve-end-time');
+          newEl.find('.selected-date').text(dayjs().format('DD/MM/YYYY'));
           startTimeSel.val(dayjs().format("YYYY-MM-DDTHH:mm"));
           endTimeSel.val(dayjs().add(2, 'hour').format("YYYY-MM-DDTHH:mm"));
           getUnavailableTime(id, seat.index, dayjs().format("YYYY-MM-DD"));
