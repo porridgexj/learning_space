@@ -1,4 +1,5 @@
-# learning space
+# IT Team's Project
+# *Learning Space*
 # Group 9
 URL of web application
 ```
@@ -21,8 +22,8 @@ python manage.py runserver
 ```
 ### Set database
 This project use MySQL as database. <br>
-Create .env file in the root directory (where manage.py is) <br>
-Content of .env file should be like this
+Create *.env* file in the root directory (where *manage.py* is) <br>
+Content of *.env* file should be like this
 ```
 DB_NAME=my_database
 DB_USER=my_user
@@ -37,4 +38,6 @@ DB_PORT=5432
     +---static       # css, js and images files
     +---templates    # html templates
     +---user         # urls, views and models of user
+    +---urls.py      # urls of web page
+    +---views.py     # views of web page
 ```

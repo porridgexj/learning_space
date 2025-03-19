@@ -260,6 +260,11 @@ function showDialog(html, callback, onMounted) {
 }
 
 let spaceInfoMap = null;
+const mapBounds = L.latLngBounds(
+  L.latLng(56.386542701886306, -4.890747126191855),
+  L.latLng(55.32758195350942, -3.355407770723105)
+);
+const defaultPos = { lat: 55.86567951095817, lng: -4.2657280003186315 };
 function initSpaceInfoMap(space) {
   const { space_name, score, latitude, longitude } = space;
   if (spaceInfoMap) spaceInfoMap.remove();
@@ -268,10 +273,7 @@ function initSpaceInfoMap(space) {
     minZoom: 9,
     maxZoom: 18,
   }).addTo(spaceInfoMap);
-  spaceInfoMap.setMaxBounds(L.latLngBounds(
-    L.latLng(56.386542701886306, -4.890747126191855),
-    L.latLng(55.32758195350942, -3.355407770723105)
-  ));
+  spaceInfoMap.setMaxBounds(mapBounds);
   const mapIconSpace = L.divIcon({
     className: 'map-icon map-icon-space',
     html: `
@@ -338,18 +340,23 @@ function getPosition() {
           (position) => {
             let latitude = position.coords.latitude;
             let longitude = position.coords.longitude;
-            userPosition = { lat: latitude, lng: longitude };
+            const point = L.latLng(latitude, longitude);
+            if (mapBounds.contains(point)) {
+              userPosition = { lat: latitude, lng: longitude };
+            } else {
+              userPosition = defaultPos;
+            }
             hideGlobalLoading();
             resolve();
           },
           (error) => {
-            userPosition = { lat: 55.86567951095817, lng: -4.2657280003186315 };
+            userPosition = defaultPos;
             hideGlobalLoading();
             resolve();
           }
         );
       } else {
-        userPosition = { lat: 55.86567951095817, lng: -4.2657280003186315 };
+        userPosition = defaultPos;
         hideGlobalLoading();
         resolve();
       }
