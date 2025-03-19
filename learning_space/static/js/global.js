@@ -395,7 +395,9 @@ function hideGlobalLoading() {
       $('#global-loading').hide();
     } else {
       setTimeout(() => {
-        $('#global-loading').hide();
+        if (globalLoadingCounter < 1) {
+          $('#global-loading').hide();
+        }
       }, leastInterval - timeInterval);
     }
   }
