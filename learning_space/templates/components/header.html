@@ -1,7 +1,7 @@
 <div class="header">
   <div class="header-left">
     {% if is_login and not is_home %}
-    <a href="/">
+    <a href="{% url 'index' %}">
       <div class="it-btn">Home</div>
     </a>
     {% endif %}
@@ -10,16 +10,8 @@
     {% endif %}
   </div>
   <div class="header-right">
-    {% if not is_login and not is_login_page %}
-    <a href="/login">
-      <div class="it-btn">Log in</div>
-    </a>
-    <a href="/login">
-      <div class="it-btn">Sign up</div>
-    </a>
-    {% endif %}
     {% if is_login and not is_reservations_page %}
-    <a href="/reservations">
+    <a href="{% url 'reservations' %}">
       <div class="it-btn reservations-button">My Reservations</div>
     </a>
     {% endif %}
