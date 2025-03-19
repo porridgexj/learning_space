@@ -1,5 +1,5 @@
 :root {
-  --space-list-width: 300px;
+  --space-list-width: 350px;
   --seats-row-num: 6;
   --seats-gap: 40px;
   --seats-gap-sum: calc((var(--seats-row-num) + 1) * var(--seats-gap))
