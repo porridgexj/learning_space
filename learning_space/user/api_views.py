@@ -53,7 +53,7 @@ def register(request):
         return JsonResponse(
             {
                 "code": 200,
-                "message": "注册成功",
+                "message": "register successfully",
                 "data": {
                     "user_id": user.id,
                     "email": user.email,
@@ -166,7 +166,7 @@ def get_booking_history(request):
 
 @require_http_methods(["POST"])
 def submit_comment(request):
-    """提交评论接口"""
+    """Submit comments interface"""
     try:
         data = json.loads(request.body)
         email = data.get("email", "").strip()
@@ -174,46 +174,46 @@ def submit_comment(request):
         score = data.get("score", "")
         comment_description = data.get("comment", "").strip()
 
-        # 1. 验证必填字段
+        # 1. Verify required fields
         if not all([email, space_id, score, comment_description]):
             return JsonResponse(
-                {"code": 400, "message": "缺失必填字段：邮箱、教室ID、评分、评论内容"},
+                {"code": 400, "message": "Missing required fields: Email, Classroom ID, Rating, Review Content."},
                 status=400,
             )
 
-        # 2. 验证评分范围
+        # 2. Validate the rating range
         try:
             score = float(score)
             if not (1 <= score <= 5):
                 raise ValueError
         except ValueError:
             return JsonResponse(
-                {"code": 400, "message": "评分必须是1到5之间的数字"}, status=400
+                {"code": 400, "message": "The rating must be a number between 1 and 5"}, status=400
             )
 
-        # 3. 查询用户和教室
+        # 3. Query the user and classroom
         try:
             user = User.objects.get(email=email)
             space = LearningSpace.objects.get(id=space_id)
         except ObjectDoesNotExist:
             return JsonResponse(
-                {"code": 404, "message": "用户或教室不存在"}, status=404
+                {"code": 404, "message": "User or classroom does not exist"}, status=404
             )
 
-        # 4. 创建评论
+        # 4. Create comments
         comment = Comment.objects.create(
             user=user,
             space=space,
             comment_description=comment_description,
             score=score,
-            status=0,  # 默认状态为 Active
+            status=0,  # The default status is Active
         )
 
-        # 5. 返回成功响应
+        # 5. Return a successful response
         return JsonResponse(
             {
                 "code": 200,
-                "message": "评论提交成功",
+                "message": "Submit comment successfully",
                 "data": {
                     "comment_id": comment.id,
                     "user_email": user.email,
@@ -226,7 +226,7 @@ def submit_comment(request):
         )
 
     except json.JSONDecodeError:
-        return JsonResponse({"code": 400, "message": "无效的JSON格式"}, status=400)
+        return JsonResponse({"code": 400, "message": "Invalid JSON format"}, status=400)
     except Exception as e:
         return JsonResponse({"code": 500, "message": "error"}, status=500)
 
@@ -259,7 +259,7 @@ def get_comments(request):
     return JsonResponse(
         {
             "code": 200,
-            "message": "查询成功",
+            "message": "Query successful",
             "data": comments_list,
         }
     )
