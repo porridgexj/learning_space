@@ -35,6 +35,7 @@ function getReservations() {
       } else {
         statusEl.text('Expired');
         statusEl.css('background-color', '#cc0000');
+        newEl.find('.cancel-btn').hide();
       }
       newEl.show();
     }

@@ -85,7 +85,15 @@ WSGI_APPLICATION = "learning_space.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 # load .env file
-
+ENV_FILE = BASE_DIR / ".env"
+if not ENV_FILE.exists():
+    raise FileNotFoundError(
+        """
+        .env file not found. Please create this file in the project root directory.
+        This file is used to store MySQL credentials such as username and password. 
+        For more details, please refer to the README file.
+        """
+    )
 load_dotenv()
 DATABASES = {
     # 'default': {
