@@ -21,9 +21,9 @@ pip install -r requirements.txt
 python manage.py runserver
 ```
 ### Set database
-This project use MySQL as database.
-Create *.env* file in the root directory (where *manage.py* is)
-*(.env file is included in the ZIP file uploaded to Moodle)*
+This project use MySQL as database.<br>
+Create *.env* file in the root directory (where *manage.py* is)<br>
+*(.env file is included in the ZIP file uploaded to Moodle)*<br>
 Content of *.env* file should be like this
 ```
 DB_NAME=my_database
