@@ -34,10 +34,10 @@ DB_PORT=5432
 # Project structure
 ```
 \---learning_space
-    +---space        # urls, views and models of space
+    +---space        # urls, views, models and unit test of space
     +---static       # css, js and images files
     +---templates    # html templates
-    +---user         # urls, views and models of user
+    +---user         # urls, views, models and unit test of user
     +---urls.py      # urls of web page
     +---views.py     # views of web page
 ```
