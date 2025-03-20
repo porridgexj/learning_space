@@ -1,18 +1,21 @@
+import json
+from datetime import timedelta
+from decimal import Decimal
+
 from django.test import TestCase, Client
 from django.urls import reverse
-from decimal import Decimal
 from django.utils import timezone
-from datetime import timedelta
+
+from learning_space.user.api_views import hash_password
 from learning_space.user.models import LearningSpace, User, Booking, Comment, Seat
-import json
+from learning_space.utils import generate_token
 
 
 class SpaceAPITestCase(TestCase):
     def setUp(self):
-        # Create test user
         self.user = User.objects.create(
             email='test@example.com',
-            password='testpassword',
+            password=hash_password('testpassword'),
             nickname='Test User'
         )
 
@@ -55,6 +58,11 @@ class SpaceAPITestCase(TestCase):
         )
 
         self.client = Client()
+        
+        # Generate authentication token for the test user
+        self.auth_token = generate_token(self.user.id)
+        # Set the auth cookie for authenticated requests
+        self.client.cookies['auth'] = self.auth_token
 
     def test_classroom_list(self):
         # Test default sorting

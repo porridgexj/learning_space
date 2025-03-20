@@ -3,22 +3,29 @@ from django.urls import reverse
 from learning_space.user.models import User, LearningSpace, FavouriteSpace, Comment, Booking
 import json
 from learning_space.user.api_views import hash_password
+from learning_space.utils import generate_token
+
 
 class UserAPITestCase(TestCase):
     def setUp(self):
         """nitialize test users and learning spaces"""
         self.client = Client()
         self.test_email = "test@example.com"
-        self.test_password = "securepass" # Original password
+        self.test_password = "securepass"  # Original password
         self.test_nickname = "TestUser"
-        
+
         # Create a test user (password hashing process)
         hashed_password = hash_password(self.test_password)
         self.user = User.objects.create(
-            email=self.test_email, 
+            email=self.test_email,
             password=hashed_password,  # Store the hashed password
             nickname=self.test_nickname
         )
+        self.client = Client()
+        # Generate authentication token for the test user
+        self.auth_token = generate_token(self.user.id)
+        # Set the auth cookie for authenticated requests
+        self.client.cookies['auth'] = self.auth_token
 
         # Create a learning space
         self.space = LearningSpace.objects.create(space_name="Library", seat_num=50, left_seat_num=50)
@@ -53,7 +60,7 @@ class UserAPITestCase(TestCase):
     def test_login_valid_user(self):
         """Test correct user login"""
         response = self.client.post(
-            reverse("login"),
+            reverse("login_api"),
             data=json.dumps({
                 "email": self.test_email,
                 "password": self.test_password # Submit the original password, and the view will automatically hash it.
@@ -67,7 +74,7 @@ class UserAPITestCase(TestCase):
     def test_login_invalid_password(self):
         """Test login with an incorrect password"""
         response = self.client.post(
-            reverse("login"),
+            reverse("login_api"),
             data=json.dumps({
                 "email": self.test_email,
                 "password": "wrongpassword"
@@ -77,39 +84,18 @@ class UserAPITestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_logout(self):
-    # Login firstly
-     login_response = self.client.post(
-        reverse("login"),
-        data=json.dumps({
-            "email": self.test_email,
-            "password": self.test_password
-        }),
-        content_type="application/json"
-    )
-     self.client.cookies = login_response.cookies  # Save Cookie
-    
-    # Then logout
-     response = self.client.post(reverse("logout"))
-     self.assertEqual(response.status_code, 200)
-
+        # No need to login again as we're already authenticated in setUp
+        response = self.client.post(reverse("logout"))
+        self.assertEqual(response.status_code, 200)
 
     def test_add_favourite_space(self):
         """Test adding a learning space to the favorites list"""
-        # Login firstly
-        login_response = self.client.post(
-            reverse("login"),
-            data=json.dumps({
-                "email": self.test_email,
-                "password": self.test_password
-            }),
-            content_type="application/json"
-        )
-        self.client.cookies = login_response.cookies
-        
+        # No need to login again as we're already authenticated in setUp
+
         response = self.client.post(
-            reverse("add_favourite_space"),  
+            reverse("add_favourite_space"),
             data=json.dumps({
-                "userid": self.user.id,  
+                "userid": self.user.id,
                 "spaceid": self.space.id
             }),
             content_type="application/json"
@@ -120,34 +106,16 @@ class UserAPITestCase(TestCase):
     def test_get_favourites(self):
         """Test retrieving the user's favorite learning spaces"""
         FavouriteSpace.objects.create(user=self.user, space=self.space)
-        # Login firstly
-        login_response = self.client.post(
-            reverse("login"),
-            data=json.dumps({
-                "email": self.test_email,
-                "password": self.test_password
-            }),
-            content_type="application/json"
-        )
-        self.client.cookies = login_response.cookies
-        
-        response = self.client.get(reverse("get_favourite_spaces"), {"id": self.user.id})  
+        # No need to login again as we're already authenticated in setUp
+
+        response = self.client.get(reverse("get_favourite_spaces"), {"id": self.user.id})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()["data"]), 1)
 
     def test_submit_comment(self):
         """Test submitting a review for a learning space"""
-        # Login firstly
-        login_response = self.client.post(
-            reverse("login"),
-            data=json.dumps({
-                "email": self.test_email,
-                "password": self.test_password
-            }),
-            content_type="application/json"
-        )
-        self.client.cookies = login_response.cookies
-        
+        # No need to login again as we're already authenticated in setUp
+
         response = self.client.post(
             reverse("submit_comment"),
             data=json.dumps({
@@ -163,31 +131,21 @@ class UserAPITestCase(TestCase):
 
     def test_get_comments(self):
         """Test retrieving reviews of a learning space"""
-    # Create a comment
+        # Create a comment
         Comment.objects.create(
-          user=self.user,
-          space=self.space,
-          comment_description="Great space!",
-          score=5,
-          status=0  
+            user=self.user,
+            space=self.space,
+            comment_description="Great space!",
+            score=5,
+            status=0
         )
-    
-    # Login
-        login_response = self.client.post(
-        reverse("login"),
-        data=json.dumps({
-            "email": self.test_email,
-            "password": self.test_password
-        }),
-        content_type="application/json"
-     )
-        self.client.cookies = login_response.cookies
-    
-    # Then get the comment
+
+        # No need to login again as we're already authenticated in setUp
+
+        # Then get the comment
         response = self.client.get(reverse("get_comments"), {"space_id": self.space.id})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()["data"]), 1)
-
 
     def test_get_booking_history(self):
         """Test retrieving the user's booking history"""
@@ -198,17 +156,8 @@ class UserAPITestCase(TestCase):
             end_time="2024-04-01T12:00:00Z",
             seat_no=1
         )
-        # Login 
-        login_response = self.client.post(
-            reverse("login"),
-            data=json.dumps({
-                "email": self.test_email,
-                "password": self.test_password
-            }),
-            content_type="application/json"
-        )
-        self.client.cookies = login_response.cookies
-        
-        response = self.client.get(reverse("get_booking_history"), {"id": self.user.id}) 
+        # No need to login again as we're already authenticated in setUp
+
+        response = self.client.get(reverse("get_booking_history"), {"id": self.user.id})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()["data"]), 1)
