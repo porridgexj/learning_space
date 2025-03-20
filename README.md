@@ -23,7 +23,7 @@ python manage.py runserver
 ### Set database
 This project use MySQL as database.<br>
 Create *.env* file in the root directory (where *manage.py* is)<br>
-*(.env file is included in the ZIP file uploaded to Moodle)*<br>
+*(.env file is included in the ZIP source code file uploaded to Moodle)*<br>
 Content of *.env* file should be like this
 ```
 DB_NAME=my_database

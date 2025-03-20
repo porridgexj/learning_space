@@ -89,6 +89,7 @@ ENV_FILE = BASE_DIR / ".env"
 if not ENV_FILE.exists():
     raise FileNotFoundError(
         """
+        (.env file is included in the ZIP source code file uploaded to Moodle)
         .env file not found. Please create this file in the project root directory.
         This file is used to store MySQL credentials such as username and password. 
         For more details, please refer to the README file.
